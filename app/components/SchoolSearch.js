@@ -17,7 +17,7 @@ const SchoolSearch = () => {
     <section className="bg-[#c2c295] text-gray-800 py-20 font-serif">
       <div className="container mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-5xl font-bold mb-6">Enter your Jordan to get started</h2>
+        <h2 className="text-5xl font-bold mb-6">Enter your jo to get started</h2>
 
         {/* Search Box */}
         <div className="flex justify-center items-center space-x-4 max-w-lg mx-auto">
