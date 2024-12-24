@@ -3,17 +3,17 @@
 const SchoolsGrid = () => {
   // Placeholder data for schools
   const schools = [
-    { name: 'University of Texas', reviews: 11, location: 'Dallas, TX' },
-    { name: 'Southern Methodist University', reviews: 8, location: 'Dallas, TX' },
-    { name: 'Dallas College', reviews: 5, location: 'Dallas, TX' },
+    { name: 'University of Texas at Arlington', reviews: 11, location: 'Arlington, TX' },
+    { name: 'University of Texas at Dallas', reviews: 11, location: 'Arlington, TX' },
+    { name: 'University of North Texas', reviews: 8, location: 'Dallas, TX' },
+    { name: 'University of Texas at Austin', reviews: 5, location: 'Dallas, TX' },
     { name: 'Texas Woman\'s University', reviews: 4, location: 'Dallas, TX' },
-    { name: 'University of North Texas', reviews: 7, location: 'Denton, TX' },
-    { name: 'Hardin-Simmons University', reviews: 3, location: 'Abilene, TX' },
-    { name: 'Texas Christian University', reviews: 9, location: 'Fort Worth, TX' },
-    { name: 'Jarvis Christian College', reviews: 2, location: 'Hawkins, TX' },
-    { name: 'Prairie View A&M University', reviews: 6, location: 'Prairie View, TX' },
-    { name: 'Texas A&M University', reviews: 12, location: 'College Station, TX' },
-    { name: 'Baylor University', reviews: 10, location: 'Waco, TX' },
+    { name: 'Texas Christian University', reviews: 7, location: 'Denton, TX' },
+    { name: 'Baylor University', reviews: 3, location: 'Abilene, TX' },
+    { name: 'Dallas Baptist University', reviews: 9, location: 'Fort Worth, TX' },
+    { name: 'Tarrant County College - Southeast Campus', reviews: 2, location: 'Hawkins, TX' },
+    { name: 'Tarrant County College - Trinity River', reviews: 6, location: 'Prairie View, TX' },
+    
   ];
 
   return (
