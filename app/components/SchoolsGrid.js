@@ -5,7 +5,7 @@ const SchoolsGrid = () => {
   // Add image component to each school
   //download images as jpeg and to public
   const schools = [
-    { name: 'University of JOSEPHINE', reviews: 11, location: 'Arlington, TX',image:'' },
+    { name: 'University of Texas at Arlington', reviews: 11, location: 'Arlington, TX',image:'' },
     { name: 'University of Texas at Dallas', reviews: 11, location: 'Richardson, TX' },
     { name: 'University of North Texas', reviews: 8, location: 'Denton, TX' },
     { name: 'University of Texas at Austin', reviews: 5, location: 'Austin, TX' },
