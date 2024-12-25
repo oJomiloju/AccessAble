@@ -5,16 +5,16 @@ const SchoolsGrid = () => {
   // Add image component to each school
   //download images as jpeg and to public
   const schools = [
-    { name: 'University of Texas at Arlington', reviews: 11, location: 'Arlington, TX',image:'' },
-    { name: 'University of Texas at Dallas', reviews: 11, location: 'Richardson, TX' },
-    { name: 'University of North Texas', reviews: 8, location: 'Denton, TX' },
-    { name: 'University of Texas at Austin', reviews: 5, location: 'Austin, TX' },
-    { name: 'Texas Woman\'s University', reviews: 4, location: 'Denton, TX' },
-    { name: 'Texas Christian University', reviews: 7, location: 'Fort Worth, TX' },
-    { name: 'Baylor University', reviews: 3, location: 'Waco, TX' },
-    { name: 'Dallas Baptist University', reviews: 9, location: 'Dallas, TX' },
-    { name: 'Tarrant County College - Southeast Campus', reviews: 2, location: 'Arlington, TX' },
-    { name: 'Tarrant County College - Trinity River', reviews: 6, location: 'Fort Worth, TX' },
+    { name: 'University of Texas at Arlington', reviews: 11, location: 'Arlington, TX', image:'AccessAble/public/uni_images/uta_picture.jpg' },
+    { name: 'University of Texas at Dallas', reviews: 11, location: 'Richardson, TX', image: 'AccessAble/public/uni_images/utd.jpg'},
+    { name: 'University of North Texas', reviews: 8, location: 'Denton, TX', image: 'AccessAble/public/uni_images/unt.jpg'},
+    { name: 'University of Texas at Austin', reviews: 5, location: 'Austin, TX', image: 'AccessAble/public/uni_images/utaustin.jpg' },
+    { name: 'Texas Woman\'s University', reviews: 4, location: 'Denton, TX', image: 'AccessAble/public/uni_images/texasWomens.jpg' },
+    { name: 'Texas Christian University', reviews: 7, location: 'Fort Worth, TX', image: 'AccessAble/public/uni_images/tcu.jpg' },
+    { name: 'Baylor University', reviews: 3, location: 'Waco, TX', image: 'AccessAble/public/uni_images/baylor.jpg' },
+    { name: 'Dallas Baptist University', reviews: 9, location: 'Dallas, TX', image: 'AccessAble/public/uni_images/dbu.jpg' },
+    { name: 'Tarrant County College - Southeast Campus', reviews: 2, location: 'Arlington, TX', image: 'AccessAble/public/uni_images/tccsoutheast.jpg'},
+    { name: 'Tarrant County College - Trinity River', reviews: 6, location: 'Fort Worth, TX', image: 'AccessAble/public/uni_images/tccTR.jpg'},
     
   ];
 
@@ -30,7 +30,7 @@ const SchoolsGrid = () => {
             >
               {/* Image */}
               <img
-                src="https://images.shiksha.com/mediadata/images/1651754674phpGZbT0Q.jpeg"
+                src={school.image}
                 //change src={school.image}
                 alt={school.name}
                 className="w-full h-48 object-cover"
