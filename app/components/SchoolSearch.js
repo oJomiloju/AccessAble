@@ -24,7 +24,7 @@ const SchoolSearch = () => {
             {/* Input Field */}
             <input
               type="text"
-              placeholder="Your school"
+              placeholder="Enter your school or university"
               value={school}
               onChange={(e) => setSchool(e.target.value)}
               className="w-full px-12 py-3 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder-gray-600 placeholder:font-serif"
