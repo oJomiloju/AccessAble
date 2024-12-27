@@ -100,9 +100,9 @@ const About = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { name: 'Jomi Okuwobi', role: '', img: 'https://via.placeholder.com/150' },
-            { name: 'Mo', role: '', img: 'https://via.placeholder.com/150' },
-            { name: 'Jordan', role: '', img: 'https://via.placeholder.com/150' },
-            { name: 'Josephine', role: '', img: 'https://via.placeholder.com/150' },
+            { name: 'Mo Olagbami', role: '', img: 'https://via.placeholder.com/150' },
+            { name: 'Jordan Smith-Acquah', role: '', img: 'https://via.placeholder.com/150' },
+            { name: 'Josephine Anokye', role: '', img: 'https://via.placeholder.com/150' },
           ].map((member, index) => (
             <div
               key={index}
