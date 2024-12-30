@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import AuthModal from './AuthModal';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
