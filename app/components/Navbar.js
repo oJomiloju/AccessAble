@@ -1,6 +1,7 @@
 'use client'; // Required for using React hooks in Next.js App Router
 
 import { useState } from 'react';
+import {signUp, signIn, signOut} from '@/app/lib/auth'
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for the hamburger menu
@@ -184,5 +185,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;

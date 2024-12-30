@@ -1,15 +1,15 @@
-'use client'; // Required for React hooks in Next.js App Router
+"use client"; // Required for React hooks in Next.js App Router
 
-import { useState } from 'react';
+import { useState } from "react";
 
 const SchoolSearch = () => {
-  const [school, setSchool] = useState('');
+  const [school, setSchool] = useState("");
 
   const handleSearch = () => {
     if (school) {
       console.log(`Searching for school: ${school}`);
     } else {
-      alert('Please enter a school name');
+      alert("Please enter a school name");
     }
   };
 
@@ -17,7 +17,9 @@ const SchoolSearch = () => {
     <section className="bg-[#c2c295] text-gray-800 py-20 font-serif">
       <div className="container mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-5xl font-bold mb-6">Enter your university to get started</h2>
+        <h2 className="text-5xl font-bold mb-6">
+          Enter your university to get started
+        </h2>
         {/* Search Box */}
         <div className="flex justify-center items-center space-x-4 max-w-lg mx-auto">
           <div className="relative w-full">
@@ -41,21 +43,21 @@ const SchoolSearch = () => {
                 <polygon
                   points="32 192 256 64 480 192 256 320 32 192"
                   style={{
-                    fill: 'none',
-                    stroke: '#000',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '32px',
+                    fill: "none",
+                    stroke: "#000",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32px",
                   }}
                 />
                 <polyline
                   points="112 240 112 368 256 448 400 368 400 240"
                   style={{
-                    fill: 'none',
-                    stroke: '#000',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '32px',
+                    fill: "none",
+                    stroke: "#000",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32px",
                   }}
                 />
                 <line
@@ -64,11 +66,11 @@ const SchoolSearch = () => {
                   y1="368"
                   y2="192"
                   style={{
-                    fill: 'none',
-                    stroke: '#000',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '32px',
+                    fill: "none",
+                    stroke: "#000",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32px",
                   }}
                 />
                 <line
@@ -77,11 +79,11 @@ const SchoolSearch = () => {
                   y1="320"
                   y2="448"
                   style={{
-                    fill: 'none',
-                    stroke: '#000',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '32px',
+                    fill: "none",
+                    stroke: "#000",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32px",
                   }}
                 />
               </svg>
@@ -95,10 +97,10 @@ const SchoolSearch = () => {
             Search
           </button>
         </div>
-
-        
       </div>
     </section>
+
+  
   );
 };
 

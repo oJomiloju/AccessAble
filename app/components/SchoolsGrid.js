@@ -23,7 +23,7 @@ const SchoolsGrid = () => {
               key={index}
               href={`/schools/${encodeURIComponent(school.name)}`}
             >
-              <div className="bg-[#c2c295] rounded-lg shadow-md overflow-hidden cursor-pointer">
+              <div className="bg-primary rounded-xl shadow-md overflow-hidden cursor-pointer">
                 <img
                   src={school.image}
                   alt={school.name}
