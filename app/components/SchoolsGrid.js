@@ -1,31 +1,67 @@
+'use client';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import supabase from '../lib/supabaseClient';
+
+const SkeletonCard = () => (
+  <div className="bg-gray-300 animate-pulse rounded-xl shadow-md overflow-hidden">
+    <div className="w-full h-48 bg-gray-400"></div>
+    <div className="p-4 space-y-2">
+      <div className="h-6 bg-gray-400 rounded"></div>
+      <div className="h-4 bg-gray-400 rounded w-1/2"></div>
+      <div className="h-4 bg-gray-400 rounded w-3/4"></div>
+    </div>
+  </div>
+);
 
 const SchoolsGrid = () => {
-  const schools = [
-    { name: 'University of Texas at Arlington', reviews: 11, location: 'Arlington, TX', image: '/uni_images/uta_picture.jpg' },
-    { name: 'University of Texas at Dallas', reviews: 11, location: 'Richardson, TX', image: '/uni_images/utd.jpg' },
-    { name: 'University of North Texas', reviews: 8, location: 'Denton, TX', image: '/uni_images/unt.jpg' },
-    { name: 'University of Texas at Austin', reviews: 5, location: 'Austin, TX', image: '/uni_images/utaustin.jpg' },
-    { name: 'Texas Woman\'s University', reviews: 4, location: 'Denton, TX', image: '/uni_images/texasWomens.jpg' },
-    { name: 'Texas Christian University', reviews: 7, location: 'Fort Worth, TX', image: '/uni_images/tcu.jpg' },
-    { name: 'Baylor University', reviews: 3, location: 'Waco, TX', image: '/uni_images/baylor.jpg' },
-    { name: 'Dallas Baptist University', reviews: 9, location: 'Dallas, TX', image: '/uni_images/dbu.jpg' },
-    { name: 'Tarrant County College - Southeast Campus', reviews: 2, location: 'Arlington, TX', image: '/uni_images/tccsoutheast.jpg' },
-    { name: 'Tarrant County College - Trinity River', reviews: 6, location: 'Fort Worth, TX', image: '/uni_images/tccTR.jpg' },
-  ];
+  const [schools, setSchools] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSchools = async () => {
+      const { data, error } = await supabase
+        .from('universities') // Table name
+        .select('*'); // Fetch all columns
+
+      if (error) {
+        console.error('Error fetching universities:', error);
+      } else {
+        setSchools(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchSchools();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="bg-[#FAFAFA] py-10">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-[#FAFAFA] py-10">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {schools.map((school, index) => (
+          {schools.map((school) => (
             <Link
-              key={index}
+              key={school.id}
               href={`/schools/${encodeURIComponent(school.name)}`}
             >
               <div className="bg-primary rounded-xl shadow-md overflow-hidden cursor-pointer">
                 <img
-                  src={school.image}
+                  loading="lazy"
+                  src={school.image_url} // Use the image_url field from your database
                   alt={school.name}
                   className="w-full h-48 object-cover"
                 />
@@ -33,7 +69,9 @@ const SchoolsGrid = () => {
                   <h3 className="text-xl font-bold text-gray-800 truncate">
                     {school.name}
                   </h3>
-                  <p className="text-sm text-gray-700">{school.reviews} reviews</p>
+                  <p className="text-sm text-gray-700">
+                    {school.total_reviews || 0} reviews
+                  </p>
                   <p className="text-sm text-gray-700 flex items-center mt-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -63,4 +101,3 @@ const SchoolsGrid = () => {
 };
 
 export default SchoolsGrid;
-
