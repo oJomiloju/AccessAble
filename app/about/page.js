@@ -3,7 +3,7 @@ const About = () => {
     <section className="bg-[#FAFAFA] text-gray-800">
       {/* Hero Section */}
       <div className="bg-[#C2C295] py-16 text-center ">
-        <h1 className="text-4xl font-bold mb-4">About Us</h1>
+        <h1 className="text-4xl font-bold mb-4 mt-5">About Us</h1>
         <p className="text-lg max-w-2xl mx-auto">
           At AccessAble, we empower students and visitors to navigate college campuses with ease by 
           providing ratings, resources, and insights into campus accessibility.
