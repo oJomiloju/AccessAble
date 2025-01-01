@@ -1,16 +1,52 @@
 "use client"; // Required for React hooks in Next.js App Router
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import supabase from "@/app/lib/supabaseClient";
 
 const SchoolSearch = () => {
-  const [school, setSchool] = useState("");
+  const [school, setSchool] = useState(""); // Input field value
+  const [searchResults, setSearchResults] = useState([]); // Search results
+  const [loading, setLoading] = useState(false); // Loading state
+  const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
 
-  const handleSearch = () => {
-    if (school) {
-      console.log(`Searching for school: ${school}`);
-    } else {
-      alert("Please enter a school name");
-    }
+  useEffect(() => {
+    const fetchSchools = async () => {
+      if (school.trim() === "") {
+        setSearchResults([]);
+        setShowDropdown(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("universities")
+          .select("*")
+          .ilike("name", `%${school}%`); // Case-insensitive search
+
+        if (error) {
+          console.error("Error fetching search results:", error);
+          setSearchResults([]);
+        } else {
+          setSearchResults(data);
+          setShowDropdown(true); // Show dropdown when results are found
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        setSearchResults([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounceFetch = setTimeout(fetchSchools, 300); // Add a delay for better UX
+    return () => clearTimeout(debounceFetch); // Cleanup timeout
+  }, [school]);
+
+  const handleSelection = (selectedSchool) => {
+    setSchool(selectedSchool.name);
+    setShowDropdown(false);
+    window.location.href = `/schools/${encodeURIComponent(selectedSchool.name)}`;
   };
 
   return (
@@ -20,9 +56,10 @@ const SchoolSearch = () => {
         <h2 className="text-5xl font-bold mb-6">
           Enter your university to get started
         </h2>
+
         {/* Search Box */}
-        <div className="flex justify-center items-center space-x-4 max-w-lg mx-auto">
-          <div className="relative w-full">
+        <div className="relative max-w-lg mx-auto">
+          <div className="relative">
             {/* Input Field */}
             <input
               type="text"
@@ -30,7 +67,9 @@ const SchoolSearch = () => {
               value={school}
               onChange={(e) => setSchool(e.target.value)}
               className="w-full px-12 py-3 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder-gray-600 placeholder:font-serif"
+              onFocus={() => setShowDropdown(true)} // Show dropdown on focus
             />
+
             {/* SVG Icon */}
             <div className="absolute inset-y-0 left-4 flex items-center text-gray-600">
               <svg
@@ -89,18 +128,38 @@ const SchoolSearch = () => {
               </svg>
             </div>
           </div>
-          {/* Button */}
-          <button
-            onClick={handleSearch}
-            className="px-6 py-3 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition duration-300 font-bold"
-          >
-            Search
-          </button>
+
+          {/* Dropdown */}
+          {showDropdown && searchResults.length > 0 && (
+            <ul className="absolute w-full bg-white shadow-md rounded-lg mt-2 z-50 max-h-64 overflow-y-auto">
+              {searchResults.map((result) => (
+                <li
+                  key={result.id}
+                  className="px-4 py-2 text-left hover:bg-gray-200 cursor-pointer"
+                  onClick={() => handleSelection(result)}
+                >
+                  {result.name}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Loading Indicator */}
+          {loading && (
+            <div className="absolute top-0 right-0 mt-3 mr-6 text-gray-500">
+              Searching...
+            </div>
+          )}
+
+          {/* No Results */}
+          {!loading && searchResults.length === 0 && school.trim() !== "" && (
+            <div className="absolute w-full bg-white shadow-md rounded-lg mt-2 z-50">
+              <p className="px-4 py-2 text-left text-gray-600">No results found</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
-
-  
   );
 };
 
