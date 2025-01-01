@@ -53,7 +53,7 @@ const SchoolSearch = () => {
     <section className="bg-[#c2c295] text-gray-800 py-20 font-serif">
       <div className="container mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-5xl font-bold mb-6">
+        <h2 className="text-5xl font-bold mb-6 ">
           Enter your university to get started
         </h2>
 
