@@ -1,9 +1,68 @@
 'use client';
 
 import React from 'react';
+import { useState } from 'react';
+import { signUp , signIn } from '../lib/auth';
+import supabase from '../lib/supabaseClient';         
 
 const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState('');
+
+  
   if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage('');
+
+    try {
+      let response;
+      if (isLogin) {
+        console.log('Logging in with:', email, password); //debug code
+        response = await signIn(email, password);
+      } else {
+        console.log('Signing ip with:', email, password); //debug code
+        response = await signUp(email, password);
+        console.log('SignUp response:', response);
+        if (!response.error) //adding user to DB if we are signingUp instead of logging in
+        {
+          console.log('Sign up successful, inserting profile...');
+          
+          const {error: profileError} = await supabase
+            .from('profiles')
+            .insert({
+              user_id: response.user?.id,
+              email: response.user?.email,
+              username: username,
+            });
+
+          if (profileError) throw profileError;
+        }
+      }
+
+      if (response.error) {
+        console.error('Error during signUp:', response.error);
+        throw response.error;
+      }
+      setMessage('Success');
+      onClose();
+    } catch (err) {
+      setMessage(err.message || 'An error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setEmail('');
+    setUsername('');
+    setPassword('');
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -22,11 +81,13 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
         </h2>
 
         {/* Form */}
-        <form>
+        <form onSubmit={handleSubmit}>
           {!isLogin && (
             <div className="mb-4">
               <input
                 type="text"
+                value={username} //this is what links it to the react useState variable
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-2 bg-white text-gray-800 border border-black placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                 placeholder="Username"
               />
@@ -35,6 +96,8 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
           <div className="mb-4">
             <input
               type="email"
+              value = {email}
+              onChange={(e) => setEmail(e.target.value.toLowerCase())}
               className="w-full p-2 bg-white text-gray-800 border border-black placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="Email"
             />
@@ -42,6 +105,8 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
           <div className="mb-6">
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 bg-white text-gray-800 border border-black placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="Password"
             />
@@ -60,7 +125,11 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
             <>
               Don’t have an account?{' '}
               <span
-                onClick={() => setIsLogin(false)}
+                onClick={() => {
+
+                  setIsLogin(false);
+                  resetForm();
+                }}
                 className="text-[#497c4b] font-bold cursor-pointer hover:underline"
               >
                 Sign Up
@@ -70,7 +139,10 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
             <>
               Already have an account?{' '}
               <span
-                onClick={() => setIsLogin(true)}
+                onClick={() => {
+                  setIsLogin(true);
+                  resetForm();
+                }}
                 className="text-[#497c4b] font-bold cursor-pointer hover:underline"
               >
                 Login
