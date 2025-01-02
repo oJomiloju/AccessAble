@@ -2,61 +2,136 @@
 
 import React from 'react';
 import { useState } from 'react';
-import { signUp , signIn } from '../lib/auth';
 import supabase from '../lib/supabaseClient';         
 
-const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin }) => {
+const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
 
+  const signUp = async (email, password, username) => {
+    try {
+      const { data: signUpData, error } = await supabase.auth.signUp({ email, password });
+  
+      console.log('SignUp response:', signUpData, error);
+  
+      if (error) {
+        console.error('SignUp error:', error.message);
+        return { user: null, error };
+      }
+  
+      // Fetch user after sign-up if not available
+      let userId = signUpData.user?.id;
+      if (!userId) {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error('Error fetching session:', sessionError.message);
+          throw sessionError;
+        }
+        userId = sessionData?.user?.id;
+      }
+  
+      if (!userId) {
+        throw new Error('Unable to fetch user ID after sign-up.');
+      }
+  
+      // Insert profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .insert([{ id: userId, email, username }]);
+  
+      if (profileError) {
+        console.error('Error inserting profile:', profileError.message);
+        throw profileError;
+      }
+  
+      console.log('Profile successfully created:', profile);
+      return { user: { id: userId, email }, profile, error: null };
+    } catch (err) {
+      console.error('Unexpected error during signUp:', err.message);
+      return { user: null, error: err };
+    }
+  };
+  
+  
+
+ const signIn = async (email , password) => {
+    const { user, error } = await supabase.auth.signInWithPassword({ email, password});
+    return { user, error };
+  };
+
+ const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    return { user, error };
+  };
+
   
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setMessage('');
-
+    e.preventDefault(); // Prevent default form submission
+    setIsLoading(true); // Show loading state
+    setMessage(''); // Clear any previous messages
+  
     try {
       let response;
       if (isLogin) {
-        console.log('Logging in with:', email, password); //debug code
+        // Log the user in
+        console.log('Logging in with:', email, password);
         response = await signIn(email, password);
       } else {
-        console.log('Signing ip with:', email, password); //debug code
-        response = await signUp(email, password);
-        console.log('SignUp response:', response);
-        if (!response.error) //adding user to DB if we are signingUp instead of logging in
-        {
-          console.log('Sign up successful, inserting profile...');
-          
-          const {error: profileError} = await supabase
-            .from('profiles')
-            .insert({
-              user_id: response.user?.id,
-              email: response.user?.email,
-              username: username,
-            });
-
-          if (profileError) throw profileError;
-        }
+        // Sign the user up and insert into profiles table
+        console.log('Signing up with:', email, password, username);
+        response = await signUp(email, password, username); // Pass username to the function
       }
-
+  
       if (response.error) {
-        console.error('Error during signUp:', response.error);
-        throw response.error;
+        // Handle any errors during the process
+        console.error('Error during authentication:', response.error.message);
+        throw new Error(response.error.message);
       }
-      setMessage('Success');
+      
+      let fetchedUsername = username; // Use entered username for signup
+
+    // Fetch username for login
+    if (isLogin) {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData?.user?.id;
+
+      if (userId) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', userId)
+          .single();
+
+        if (profileError) {
+          throw new Error('Error fetching profile: ' + profileError.message);
+        }
+
+        fetchedUsername = profile.username; // Fetch username from database
+      }
+    }
+
+    // Pass the username to the onLoginSuccess callback
+    onLoginSuccess(fetchedUsername);
+
+
+      // If successful, set the success message and close the modal
+      setMessage('Success! You are now registered.');
       onClose();
     } catch (err) {
-      setMessage(err.message || 'An error occurred');
+      // Handle unexpected errors
+      console.error('Error:', err.message || 'An unexpected error occurred');
+      setMessage(err.message || 'An unexpected error occurred');
     } finally {
+      // Always stop the loading spinner
       setIsLoading(false);
     }
   };
+  
 
   const resetForm = () => {
     setEmail('');

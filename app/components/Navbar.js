@@ -1,12 +1,62 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AuthModal from './AuthModal';
+import supabase from '../lib/supabaseClient';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState(null); // Store the username
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+
+  // Fetch the current user's username
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) {
+          console.error('Error fetching session:', sessionError.message);
+          return;
+        }
+
+        const userId = sessionData?.user?.id;
+
+        if (userId) {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', userId)
+            .single();
+
+          if (profileError) {
+            console.error('Error fetching profile:', profileError.message);
+            return;
+          }
+
+          setUsername(profile.username); // Set the username in state
+          setIsLoggedIn(true); // Mark user as logged in
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching username:', err.message);
+      }
+    };
+
+    fetchUsername();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      setUsername(null); // Clear username
+      setIsLoggedIn(false); // Mark user as logged out
+    } catch (err) {
+      console.error('Error signing out:', err.message);
+    }
+  };
 
   return (
     <div className="relative z-50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
@@ -18,18 +68,30 @@ const Navbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-6 items-center">
-          <a href="/about" className="text-lg hover:underline">
-            About
-          </a>
-          <button
-            className="px-4 py-2 border border-black rounded-full text-lg hover:bg-black hover:text-white transition duration-300"
-            onClick={() => {
-              setIsAuthModalOpen(true);
-              setIsLogin(true);
-            }}
-          >
-            Login
-          </button>
+          <a href="/about" className="text-lg hover:underline">About</a>
+          {isLoggedIn ? (
+            <div className="relative group">
+              <button className="text-lg font-bold">Welcome, {username}!</button>
+              <div className="absolute hidden group-hover:block bg-white border border-gray-300 shadow-lg rounded mt-2">
+                <button
+                  onClick={handleSignOut}
+                  className="block px-4 py-2 text-black hover:bg-gray-100 w-full text-left"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              className="px-4 py-2 border border-black rounded-full text-lg hover:bg-black hover:text-white transition duration-300"
+              onClick={() => {
+                setIsAuthModalOpen(true);
+                setIsLogin(true);
+              }}
+            >
+              Login
+            </button>
+          )}
         </div>
 
         {/* Hamburger Icon for Mobile */}
@@ -93,16 +155,33 @@ const Navbar = () => {
             >
               About
             </a>
-            <button
-              className="text-2xl font-bold mb-6 hover:underline"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                setIsAuthModalOpen(true);
-                setIsLogin(true);
-              }}
-            >
-              Login
-            </button>
+            {isLoggedIn ? (
+              <div className="relative group">
+                <button className="text-2xl font-bold">Welcome, {username}!</button>
+                <div className="absolute hidden group-hover:block bg-white border border-gray-300 shadow-lg rounded mt-2">
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block px-4 py-2 text-black hover:bg-gray-100 w-full text-left"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                className="text-2xl font-bold mb-6 hover:underline"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsAuthModalOpen(true);
+                  setIsLogin(true);
+                }}
+              >
+                Login
+              </button>
+            )}
           </div>
         )}
 
@@ -112,6 +191,11 @@ const Navbar = () => {
           onClose={() => setIsAuthModalOpen(false)}
           isLogin={isLogin}
           setIsLogin={setIsLogin}
+          onLoginSuccess={(username) => {
+            setUsername(username); // Set username in Navbar
+            setIsLoggedIn(true); // Mark user as logged in
+            setIsAuthModalOpen(false); // Close modal
+          }}
         />
       </nav>
     </div>
