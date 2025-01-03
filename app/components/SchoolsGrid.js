@@ -58,7 +58,7 @@ const SchoolsGrid = () => {
               key={school.id}
               href={`/schools/${encodeURIComponent(school.name)}`}
             >
-              <div className="bg-primary rounded-xl shadow-md overflow-hidden cursor-pointer">
+              <div className="bg-[#004087] rounded-xl shadow-md overflow-hidden cursor-pointer">
                 <img
                   loading="lazy"
                   src={school.image_url} // Use the image_url field from your database
@@ -66,16 +66,16 @@ const SchoolsGrid = () => {
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-xl font-bold text-gray-800 truncate">
+                  <h3 className="text-xl font-sans font-bold text-[#ffedd6] truncate">
                     {school.name}
                   </h3>
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-[#ffedd6]">
                     {school.total_reviews || 0} reviews
                   </p>
-                  <p className="text-sm text-gray-700 flex items-center mt-1">
+                  <p className="text-sm text-[#ffedd6] flex items-center mt-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-1 text-gray-700"
+                      className="h-4 w-4 mr-1 text-[#ffedd6]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"

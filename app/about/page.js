@@ -2,7 +2,7 @@ const About = () => {
   return (
     <section className="bg-[#FAFAFA] text-gray-800">
       {/* Hero Section */}
-      <div className="bg-[#C2C295] py-16 text-center ">
+      <div className="bg-[#bcd2e3] py-16 text-center ">
         <h1 className="text-4xl font-bold mb-4 mt-5">About Us</h1>
         <p className="text-lg max-w-2xl mx-auto">
           At AccessAble, we empower students and visitors to navigate college campuses with ease by 
@@ -50,7 +50,7 @@ const About = () => {
           AccessAble aims to create an inclusive environment for everyone, whether you're attending 
           a lecture, exploring the library, or enjoying campus life.
         </p>
-        <blockquote className="mt-4 bg-[#C2C295] p-4 rounded-lg shadow-md">
+        <blockquote className="mt-4 bg-[#bcd2e3] p-4 rounded-lg shadow-md">
           "Every student deserves a campus that supports their mobility and independence."
         </blockquote>
       </div>
@@ -66,21 +66,21 @@ const About = () => {
             thriving in your academic environment.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-[#C2C295] p-6 rounded-lg shadow-md">
+            <div className="bg-[#bcd2e3] p-6 rounded-lg shadow-md">
               <h4 className="text-xl font-bold mb-2">Comprehensive Ratings</h4>
               <p>
                 Detailed evaluations of ramps, elevators, restrooms, parking, and more, so you know 
                 what to expect.
               </p>
             </div>
-            <div className="bg-[#C2C295] p-6 rounded-lg shadow-md">
+            <div className="bg-[#bcd2e3] p-6 rounded-lg shadow-md">
               <h4 className="text-xl font-bold mb-2">Community Feedback</h4>
               <p>
                 Real insights from students, staff, and visitors to help create accurate accessibility 
                 ratings.
               </p>
             </div>
-            <div className="bg-[#C2C295] p-6 rounded-lg shadow-md">
+            <div className="bg-[#bcd2e3] p-6 rounded-lg shadow-md">
               <h4 className="text-xl font-bold mb-2">Accessibility Advocacy</h4>
               <p>
                 Promoting awareness and improvements to ensure every campus is designed for inclusivity.
