@@ -15,14 +15,12 @@ const Skeleton = () => (
   </div>
 );
 
-
-
 export default function SchoolPage({ params }) {
   const [school, setSchool] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null); 
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     async function fetchSchoolData() {
@@ -41,7 +39,17 @@ export default function SchoolPage({ params }) {
 
         const { data: reviewsData, error: reviewsError } = await supabase
           .from("reviews")
-          .select("*")
+          .select(`
+            id,
+            comment,
+            review_date,
+            stars,
+            recreation_center_rating,
+            dining_hall_rating,
+            main_area_rating,
+            reviewer_id,
+            profiles (username)
+          `)
           .eq("university_id", schoolData.id);
 
         if (reviewsError) console.error("Error fetching reviews:", reviewsError);
@@ -78,8 +86,6 @@ export default function SchoolPage({ params }) {
   if (loading) return <Skeleton />;
 
   if (!school) return <div className="text-center py-10">School not found.</div>;
-
-
 
   return (
     <div className="min-h-screen">
@@ -127,80 +133,81 @@ export default function SchoolPage({ params }) {
 
         {/* Reviews Section */}
         <div className="lg:w-2/3 space-y-6">
-  <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
-    {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
-  </h2>
-  {reviews.length ? (
-    <div className="space-y-4">
-      {reviews.map((review, index) => (
-        <div key={index} className="border rounded-lg p-4 bg-white shadow-lg">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm font-bold text-gray-800">{currentUser.username || "Anonymous"}</span>
-            <span className="text-sm text-gray-500">
-              {new Date(review.review_date).toLocaleDateString()}
-            </span>
-          </div>
-          <p className="mb-4">{review.comment || "No comment provided."}</p>
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { key: "recreation_center_rating", label: "Recreation Center" },
-              { key: "dining_hall_rating", label: "Dining Hall" },
-              { key: "main_area_rating", label: "Main Area" },
-            ].map(({ key, label }, i) => (
-              <div key={i}>
-                <h3 className="text-sm font-semibold">{label}</h3>
-                <div className="flex space-x-1">
-                  {review[key] || 0}
+          <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
+            {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
+          </h2>
+          {reviews.length ? (
+            <div className="space-y-4">
+              {reviews.map((review, index) => (
+                <div key={index} className="border rounded-lg p-4 bg-white shadow-lg">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-sm font-bold text-gray-800">
+                      {review.profiles?.username || " Anonymous"}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {new Date(review.review_date).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="mb-4">{review.comment || "No comment provided."}</p>
+                  <div className="grid grid-cols-3 gap-4">
+                    {[
+                      { key: "recreation_center_rating", label: "Recreation Center" },
+                      { key: "dining_hall_rating", label: "Dining Hall" },
+                      { key: "main_area_rating", label: "Main Area" },
+                    ].map(({ key, label }, i) => (
+                      <div key={i}>
+                        <h3 className="text-sm font-semibold">{label}</h3>
+                        <div className="flex space-x-1">
+                          {review[key] || 0}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <div className="text-center bg-gray-50 py-16 px-8 rounded-lg shadow-lg border border-gray-200">
-      <div className="flex flex-col items-center space-y-6">
-        {/* Icon */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-20 w-20 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-        <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
-          No Reviews Yet
-        </h2>
-
-              {/* Description */}
-              <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
-                Be the first to share your experience and help others learn more about this schools Accessibility. Your review could make a big difference!
-              </p>
-
-              {/* Call-to-Action Button */}
-              <button onClick={() => setModalOpen(true)}  className="bg-gray-900 hover:bg-gray-600 text-white py-3 px-8 rounded-full shadow-md transition-transform transform hover:scale-105">
-                Review
-              </button>
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="text-center bg-gray-50 py-16 px-8 rounded-lg shadow-lg border border-gray-200">
+              <div className="flex flex-col items-center space-y-6">
+                {/* Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-20 w-20 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
+                  No Reviews Yet
+                </h2>
 
+                {/* Description */}
+                <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
+                  Be the first to share your experience and help others learn more about this schools Accessibility. Your review could make a big difference!
+                </p>
+
+                {/* Call-to-Action Button */}
+                <button onClick={() => setModalOpen(true)}  className="bg-gray-900 hover:bg-gray-600 text-white py-3 px-8 rounded-full shadow-md transition-transform transform hover:scale-105">
+                  Review
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
-          <ReviewModal
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
-            universityId={school.id}
-            currentUser={currentUser} // Pass the user data here
-          />;
+      <ReviewModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        universityId={school.id}
+        currentUser={currentUser} // Pass the user data here
+      />
     </div>
   );
 }

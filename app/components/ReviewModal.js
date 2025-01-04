@@ -37,6 +37,7 @@ const ReviewModal = ({ isOpen, onClose, universityId, currentUser }) => {
       } else {
         console.log("Review submitted successfully:", data);
         onClose(); // Close the modal after submission
+        window.location.reload();
       }
     } catch (err) {
       console.error("Unexpected error:", err);
