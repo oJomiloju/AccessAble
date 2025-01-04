@@ -50,11 +50,11 @@ const SchoolSearch = () => {
   };
 
   return (
-    <section className="bg-[#c2c295] text-gray-800 py-20 font-serif">
+    <section className="bg-[#bcd2e3] text-gray-800 py-20 font-serif">
       <div className="container mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-5xl font-bold mb-6 ">
-          Enter your university to get started
+        <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
+          Accessability, your way.
         </h2>
 
         {/* Search Box */}
@@ -63,15 +63,19 @@ const SchoolSearch = () => {
             {/* Input Field */}
             <input
               type="text"
-              placeholder="Enter your school or university"
+              placeholder= "Enter your school or university text" 
               value={school}
               onChange={(e) => setSchool(e.target.value)}
-              className="w-full px-12 py-3 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder-gray-600 placeholder:font-serif"
+              className="w-full px-12 py-3 border border-[#083d77] rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder-gray-600 placeholder:font-serif"
               onFocus={() => setShowDropdown(true)} // Show dropdown on focus
             />
 
+            
+
+
+
             {/* SVG Icon */}
-            <div className="absolute inset-y-0 left-4 flex items-center text-gray-600">
+            <div className="absolute inset-y-0 left-4 flex items-center text-[#083d77]">
               <svg
                 height="24"
                 viewBox="0 0 512 512"
