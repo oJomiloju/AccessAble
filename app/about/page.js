@@ -99,10 +99,10 @@ const About = () => {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { name: 'Jomi Okuwobi', role: '', img: 'https://via.placeholder.com/150' },
-            { name: 'Mo Olagbami', role: '', img: 'https://via.placeholder.com/150' },
-            { name: 'Jordan Smith-Acquah', role: '', img: 'https://via.placeholder.com/150' },
-            { name: 'Josephine Anokye', role: '', img: 'https://via.placeholder.com/150' },
+            { name: 'Mo Olagbami', role: 'President, CEO', img: '/teamPhotos/mo.jpg' },
+            { name: 'Jomi Okuwobi', role: 'Lead Backend Developer', img: '/teamPhotos/jomi.jpg' },
+            { name: 'Jordan Smith-Acquah', role: 'Lead Backend Developer', img: '/teamPhotos/jordan.jpeg' },
+            { name: 'Josephine Anokye', role: 'Senior Frontend Developer', img: '/teamPhotos/josephine.jpg' },
           ].map((member, index) => (
             <div
               key={index}
