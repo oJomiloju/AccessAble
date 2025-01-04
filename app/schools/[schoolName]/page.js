@@ -135,7 +135,7 @@ export default function SchoolPage({ params }) {
       {reviews.map((review, index) => (
         <div key={index} className="border rounded-lg p-4 bg-white shadow-lg">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-sm font-bold text-gray-800">{review.name || "Anonymous"}</span>
+            <span className="text-sm font-bold text-gray-800">{currentUser.username || "Anonymous"}</span>
             <span className="text-sm text-gray-500">
               {new Date(review.review_date).toLocaleDateString()}
             </span>
