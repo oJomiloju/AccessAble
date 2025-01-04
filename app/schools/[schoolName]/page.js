@@ -73,6 +73,8 @@ export default function SchoolPage({ params }) {
 
           if (profileError) console.error("Error fetching profile:", profileError);
           else setCurrentUser({ id: session.session.user.id, ...profile });
+        } else {
+          setCurrentUser(null); // No user logged in
         }
       } catch (err) {
         console.error("Error fetching current user:", err);
@@ -81,11 +83,35 @@ export default function SchoolPage({ params }) {
 
     fetchSchoolData();
     fetchCurrentUser();
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        // Fetch user profile when logged in
+        fetchCurrentUser();
+      } else {
+        // Clear user state when logged out
+        setCurrentUser(null);
+      }
+    });
+
+    // Cleanup listener on component unmount
+    return () => {
+      authListener?.unsubscribe();
+    };
   }, [params]);
 
   if (loading) return <Skeleton />;
 
   if (!school) return <div className="text-center py-10">School not found.</div>;
+
+  const handleWriteReviewClick = () => {
+    if (!currentUser) {
+      alert("You must be logged in or signed up to write a review.");
+      return;
+    }
+    setModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen">
@@ -125,7 +151,10 @@ export default function SchoolPage({ params }) {
 
           {/* Write Review Button */}
           <div className="mt-6 flex justify-start">
-            <button onClick={() => setModalOpen(true)} className="bg-gray-900 text-white py-2 px-6 rounded-full shadow-md hover:bg-gray-600 transition">
+            <button
+              onClick={handleWriteReviewClick}
+              className="bg-gray-900 text-white py-2 px-6 rounded-full shadow-md hover:bg-gray-600 transition"
+            >
               Write Review
             </button>
           </div>
@@ -157,9 +186,7 @@ export default function SchoolPage({ params }) {
                     ].map(({ key, label }, i) => (
                       <div key={i}>
                         <h3 className="text-sm font-semibold">{label}</h3>
-                        <div className="flex space-x-1">
-                          {review[key] || 0}
-                        </div>
+                        <div className="flex space-x-1">{review[key] || 0}</div>
                       </div>
                     ))}
                   </div>
@@ -169,7 +196,6 @@ export default function SchoolPage({ params }) {
           ) : (
             <div className="text-center bg-gray-50 py-16 px-8 rounded-lg shadow-lg border border-gray-200">
               <div className="flex flex-col items-center space-y-6">
-                {/* Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-20 w-20 text-gray-400"
@@ -177,24 +203,18 @@ export default function SchoolPage({ params }) {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
                 <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
                   No Reviews Yet
                 </h2>
-
-                {/* Description */}
                 <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
-                  Be the first to share your experience and help others learn more about this schools Accessibility. Your review could make a big difference!
+                  Be the first to share your experience and help others learn more about this school's accessibility. Your review could make a big difference!
                 </p>
-
-                {/* Call-to-Action Button */}
-                <button onClick={() => setModalOpen(true)}  className="bg-gray-900 hover:bg-gray-600 text-white py-3 px-8 rounded-full shadow-md transition-transform transform hover:scale-105">
+                <button
+                  onClick={handleWriteReviewClick}
+                  className="bg-gray-900 hover:bg-gray-600 text-white py-3 px-8 rounded-full shadow-md transition-transform transform hover:scale-105"
+                >
                   Review
                 </button>
               </div>
