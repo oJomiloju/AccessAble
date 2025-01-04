@@ -23,20 +23,28 @@ export default function SchoolPage({ params }) {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    let isMounted = true; // Track if the component is still mounted
+
     async function fetchSchoolData() {
+      if (!isMounted) return; // Prevent state updates after unmount
+
       try {
         const resolvedParams = await params;
         const schoolName = decodeURIComponent(resolvedParams.schoolName);
 
+        // Fetch school data
         const { data: schoolData, error: schoolError } = await supabase
           .from("universities")
           .select("*")
           .eq("name", schoolName)
           .single();
 
+        if (!isMounted) return; // Prevent updates if unmounted
+
         if (schoolError) console.error("Error fetching school:", schoolError);
         else setSchool(schoolData);
 
+        // Fetch reviews
         const { data: reviewsData, error: reviewsError } = await supabase
           .from("reviews")
           .select(`
@@ -52,12 +60,15 @@ export default function SchoolPage({ params }) {
           `)
           .eq("university_id", schoolData.id);
 
+        if (!isMounted) return; // Prevent updates if unmounted
+
         if (reviewsError) console.error("Error fetching reviews:", reviewsError);
         else setReviews(reviewsData || []);
       } catch (err) {
+        if (!isMounted) return; // Prevent updates if unmounted
         console.error("Unexpected error:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false); // Only update if still mounted
       }
     }
 
@@ -85,19 +96,18 @@ export default function SchoolPage({ params }) {
     fetchCurrentUser();
 
     // Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        // Fetch user profile when logged in
         fetchCurrentUser();
       } else {
-        // Clear user state when logged out
         setCurrentUser(null);
       }
     });
 
     // Cleanup listener on component unmount
     return () => {
-      authListener?.unsubscribe();
+      isMounted = false; // Mark component as unmounted
+      //subscription?.unsubscribe();
     };
   }, [params]);
 

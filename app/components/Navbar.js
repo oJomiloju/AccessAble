@@ -89,35 +89,62 @@ const Navbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-6 items-center">
-          <a href="/about" className="text-lg hover:underline">About</a>
-          {isLoggedIn ? (
-            <div className="relative group">
-              {/* Profile SVG on larger screens */}
+          {/* Enhanced "About" Button */}
+            <a
+              href="/about"
+              className="relative group inline-flex items-center justify-center px-4 py-2 text-md font-medium text-gray-800 bg-white border border-gray-300 rounded-full hover:text-white hover:border-transparent overflow-hidden transition-all duration-300 ease-in-out"
+            >
+              <span className="relative z-10">About</span>
+              <span
+                className="absolute inset-0 bg-black transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
+              ></span>
+            </a>
+
+            {isLoggedIn ? (
+        <div className="relative group">
+          {/* New Profile SVG on larger screens */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 rounded-full bg-gray-300 p-1 cursor-pointer hidden md:block"
                 viewBox="0 0 32 32"
+                className="h-12 w-10 text-gray-700 bg-white p-1 rounded-full cursor-pointer hover:scale-110 hover:text-gray-900 transition-transform duration-300 hidden md:block"
                 onClick={() => setIsSignOutModalOpen(true)}
               >
-                <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z"/>
-                <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z"/>
+                <g id="about">
+                  <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z" />
+                  <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z" />
+                </g>
               </svg>
-              {/* Username on smaller screens */}
-              <button className="text-lg font-bold md:hidden" onClick={() => setIsSignOutModalOpen(true)}>
-                Welcome, {username}!
-              </button>
+              {/* Username button on smaller screens */}
+              {/* Profile SVG on smaller screens */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                className="h-10 w-10 text-gray-700 bg-white p-1 rounded-full cursor-pointer hover:scale-110 hover:text-gray-900 transition-transform duration-300 md:hidden"
+                onClick={() => setIsSignOutModalOpen(true)}
+              >
+                <g id="about">
+                  <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z" />
+                  <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z" />
+                </g>
+              </svg>
+
             </div>
           ) : (
             <button
-              className="px-4 py-2 border border-black rounded-full text-lg hover:bg-black hover:text-white transition duration-300"
+              className="relative group inline-flex items-center justify-center px-4 py-2 text-md font-medium text-gray-800 bg-white border border-gray-300 rounded-full hover:text-white hover:border-transparent overflow-hidden transition-all duration-300 ease-in-out"
               onClick={() => {
                 setIsAuthModalOpen(true);
                 setIsLogin(true);
               }}
             >
-              Login
+              <span className="relative z-10">Login</span>
+              <span
+                className="absolute inset-0 bg-black transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
+              ></span>
             </button>
+
           )}
+
         </div>
 
         {/* Hamburger Icon for Mobile */}
@@ -176,20 +203,31 @@ const Navbar = () => {
             </button>
             <a
               href="/about"
-              className="text-2xl font-bold mb-6 hover:underline"
+              className="text-4xl font-bold mb-6 hover:underline"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               About
             </a>
             {isLoggedIn ? (
-              <div className="relative group mb-6">
-                <button
-                  className="text-2xl font-bold"
-                  onClick={() => setIsSignOutModalOpen(true)} // Open sign-out modal
-                >
-                  Welcome, {username}!
-                </button>
+              <div className="relative group mb-6 flex flex-col items-center">
+              {/* Profile SVG on smaller screens */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                className="h-20 w-24 bg-white p-1 rounded-full cursor-pointer hover:scale-110 hover:text-gray-900 transition-transform duration-300 md:hidden"
+                onClick={() => setIsSignOutModalOpen(true)}
+              >
+                <g id="about">
+                  <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z" />
+                  <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z" />
+                </g>
+              </svg>
+            
+              {/* Welcome message */}
+              <div className="text-md font-medium text-gray-700 mt-2 text-center">
+                {/*Welcome, {username || 'Guest'}*/}
               </div>
+            </div>            
             ) : (
               <button
                 className="text-2xl font-bold mb-6 hover:underline"
@@ -215,33 +253,72 @@ const Navbar = () => {
             setUsername(username); // Set username in Navbar
             setIsLoggedIn(true); // Mark user as logged in
             setIsAuthModalOpen(false); // Close modal
+            window.location.reload();
           }}
         />
 
         {/* Sign-out Confirmation Modal */}
         {isSignOutModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full text-center">
-              <h2 className="text-xl font-semibold mb-6">
-                Hello, {username ? username : 'Guest'}, would you like to log out?
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setIsSignOutModalOpen(false)} // Close modal when clicking outside
+          >
+            <div
+              className="bg-white p-6 rounded-3xl shadow-xl max-w-sm w-full text-center relative"
+              onClick={(e) => e.stopPropagation()} // Prevent modal click from propagating to the overlay
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setIsSignOutModalOpen(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                &times;
+              </button>
+
+              {/* Icon at the Top */}
+              <div className="flex justify-center items-center mb-6">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-8 h-8 text-blue-500"
+                    viewBox="0 0 32 32"
+                  >
+                    <g id="about">
+                      <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z" />
+                      <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Modal Title */}
+              <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                Hello, {username ? username : "Guest"}
               </h2>
+              <p className="text-gray-500 mb-6">Are you sure you want to log out?</p>
+
+              {/* Buttons */}
               <div className="space-y-4">
                 <button
-                  onClick={() => setIsSignOutModalOpen(false)}
-                  className="w-full px-6 py-3 bg-gray-300 text-gray-800 rounded-full text-lg hover:bg-gray-400 transition duration-300"
+                  onClick={handleSignOut}
+                  className="w-full py-3 bg-black text-white rounded-full text-lg hover:bg-gray-800 transition duration-300"
                 >
-                  Naah, Just Kidding
+                  Yes, Log Out
                 </button>
                 <button
-                  onClick={handleSignOut}
-                  className="w-full px-6 py-3 bg-blue-500 text-white rounded-full text-lg hover:bg-blue-600 transition duration-300"
+                  onClick={() => setIsSignOutModalOpen(false)}
+                  className="w-full py-3 bg-gray-100 text-gray-700 rounded-full text-lg hover:bg-gray-200 transition duration-300"
                 >
-                  Yes, Log Me Out
+                  Cancel
                 </button>
               </div>
             </div>
           </div>
         )}
+
+
+
+
       </nav>
     </div>
   );
