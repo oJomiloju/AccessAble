@@ -1,6 +1,6 @@
 const Header = () => {
     return (
-      <header className="bg-[#c2c295] text-gray-900 py-20 font-serif">
+      <header className="bg-[#bcd2e3] text-gray-900 py-20 font-serif">
         <div className="container mx-auto px-4 text-center md:text-left">
           {/* Title */}
           <h1 className="text-5xl font-bold mb-6 leading-tight">

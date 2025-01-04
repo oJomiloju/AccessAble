@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import AuthModal from './AuthModal';
 import supabase from '../lib/supabaseClient';
+import { ImageConfigContext } from 'next/dist/shared/lib/image-config-context.shared-runtime';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -81,11 +82,10 @@ const Navbar = () => {
 
   return (
     <div className="relative z-50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-      <nav className="bg-[#c2c295] px-6 py-4 flex justify-between items-center fixed top-0 left-0 right-0">
+      <nav className="bg-[#bcd2e3] h-20 px-3 py-2 flex justify-between items-center fixed top-0 left-0 right-0">
         {/* App Name */}
-        <div className="text-3xl font-serif font-bold">
-          <a href="/">AccessAble</a>
-        </div>
+        
+          <a href="/"> <img className="bg-transparent h-52 bg-contain"   src = '\images\AccessAble_1.png' alt='AccessAble logo'  ></img></a>
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-6 items-center">
@@ -158,7 +158,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Modal */}
         {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-[#c2c295] flex flex-col items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-[#bcd2e3] flex flex-col items-center justify-center z-50">
             <button
               onClick={() => setIsMobileMenuOpen(false)}
               className="absolute top-6 right-6 focus:outline-none"

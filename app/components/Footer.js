@@ -2,7 +2,7 @@
 
 const Footer = () => {
     return (
-      <footer className="bg-[#c2c295] text-gray-900 py-6">
+      <footer className="bg-[#bcd2e3] text-gray-900 py-6">
         <div className="container mx-auto px-4 text-center">
           {/* Brand Name */}
           <p className="text-lg font-bold mb-4">AccessAble</p>
