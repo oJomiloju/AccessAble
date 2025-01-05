@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AuthModal from './AuthModal';
 import supabase from '../lib/supabaseClient';
 import { ImageConfigContext } from 'next/dist/shared/lib/image-config-context.shared-runtime';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -68,17 +69,33 @@ const Navbar = () => {
   }, []);
 
   const handleSignOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
-      setUsername(null); // Clear username
-      setIsLoggedIn(false); // Mark user as logged out
-      setIsSignOutModalOpen(false); // Close sign-out modal
-    } catch (err) {
-      console.error('Error signing out:', err.message);
-    }
+    await toast.promise(
+      (async () => {
+        try {
+          const { error } = await supabase.auth.signOut();
+          if (error) throw error;
+  
+          setUsername(null); // Clear username
+          setIsLoggedIn(false); // Mark user as logged out
+          setIsSignOutModalOpen(false); // Close sign-out modal
+  
+          // Refresh the page after the toast duration
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 1000);
+        } catch (err) {
+          console.error('Error signing out:', err.message);
+          throw err; // Re-throw error for toast.promise to handle
+        }
+      })(),
+      {
+        loading: 'Signing out...',
+        success: 'Log out successful!',
+        error: (err) => `Error: ${err.message || 'An unexpected error occurred'}`,
+      }
+    );
   };
+  
 
   return (
     <div className="relative z-50" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
@@ -253,7 +270,12 @@ const Navbar = () => {
             setUsername(username); // Set username in Navbar
             setIsLoggedIn(true); // Mark user as logged in
             setIsAuthModalOpen(false); // Close modal
-            window.location.reload();
+            
+            // Refresh the page after the toast duration
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+
           }}
         />
 

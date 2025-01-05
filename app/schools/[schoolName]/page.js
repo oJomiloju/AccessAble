@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import supabase from "@/app/lib/supabaseClient";
 import ReviewModal from "@/app/components/ReviewModal";
+import toast, {Toaster} from "react-hot-toast";
+import AuthModal from "@/app/components/AuthModal";
 
 const Skeleton = () => (
   <div className="bg-gray-300 animate-pulse rounded-xl shadow-md overflow-hidden">
@@ -21,6 +23,9 @@ export default function SchoolPage({ params }) {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true); // To toggle between login and sign-up in AuthModal
+
 
   useEffect(() => {
     let isMounted = true; // Track if the component is still mounted
@@ -117,7 +122,8 @@ export default function SchoolPage({ params }) {
 
   const handleWriteReviewClick = () => {
     if (!currentUser) {
-      alert("You must be logged in or signed up to write a review.");
+      toast.error("Log in/Sign up REQUIRED");
+      setAuthModalOpen(true); // Open the AuthModal
       return;
     }
     setModalOpen(true);
@@ -153,7 +159,7 @@ export default function SchoolPage({ params }) {
 
           {/* Rating Breakdown */}
           <h3 className="text-lg font-bold mb-4">Rating Breakdown</h3>
-          {["Recreation Center", "Dining Hall", "Main Area"].map((category, index) => (
+          {["Recreation Center", "Dining Hall", "Student Center"].map((category, index) => (
             <div key={index} className="flex items-center mb-2">
               <span className="w-40 text-gray-600">{category}</span>
             </div>
@@ -192,7 +198,7 @@ export default function SchoolPage({ params }) {
                     {[
                       { key: "recreation_center_rating", label: "Recreation Center" },
                       { key: "dining_hall_rating", label: "Dining Hall" },
-                      { key: "main_area_rating", label: "Main Area" },
+                      { key: "main_area_rating", label: "Student Center" },
                     ].map(({ key, label }, i) => (
                       <div key={i}>
                         <h3 className="text-sm font-semibold">{label}</h3>
@@ -238,6 +244,18 @@ export default function SchoolPage({ params }) {
         universityId={school.id}
         currentUser={currentUser} // Pass the user data here
       />
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setAuthModalOpen(false)} // Close the modal
+        isLogin={isLogin}
+        setIsLogin={setIsLogin}
+        onLoginSuccess={(username) => {
+          setCurrentUser((prev) => ({ ...prev, username }));
+          setAuthModalOpen(false); // Close the modal after successful login
+        }}
+      />
+      
     </div>
   );
 }

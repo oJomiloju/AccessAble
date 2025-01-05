@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { useState } from 'react';
-import supabase from '../lib/supabaseClient';         
+import supabase from '../lib/supabaseClient'; 
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => {
   const [email, setEmail] = useState('');
@@ -72,64 +74,68 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
-    setIsLoading(true); // Show loading state
     setMessage(''); // Clear any previous messages
-  
-    try {
-      let response;
-      if (isLogin) {
-        // Log the user in
-        console.log('Logging in with:', email, password);
-        response = await signIn(email, password);
-      } else {
-        // Sign the user up and insert into profiles table
-        console.log('Signing up with:', email, password, username);
-        response = await signUp(email, password, username); // Pass username to the function
-      }
-  
-      if (response.error) {
-        // Handle any errors during the process
-        console.error('Error during authentication:', response.error.message);
-        throw new Error(response.error.message);
-      }
-      
-      let fetchedUsername = username; // Use entered username for signup
-
-    // Fetch username for login
-    if (isLogin) {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const userId = sessionData?.user?.id;
-
-      if (userId) {
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('username')
-          .eq('id', userId)
-          .single();
-
-        if (profileError) {
-          throw new Error('Error fetching profile: ' + profileError.message);
+    
+    // Wrap the async operation in toast.promise
+    await toast.promise(
+      (async () => {
+        setIsLoading(true); // Show loading state
+        
+        let response;
+        if (isLogin) {
+          // Log the user in
+          console.log('Logging in with:', email, password);
+          response = await signIn(email, password);
+        } else {
+          // Sign the user up and insert into profiles table
+          console.log('Signing up with:', email, password, username);
+          response = await signUp(email, password, username); // Pass username to the function
         }
-
-        fetchedUsername = profile.username; // Fetch username from database
+  
+        if (response.error) {
+          // Throw an error to trigger the toast error state
+          throw new Error(response.error.message);
+        }
+  
+        let fetchedUsername = username; // Use entered username for signup
+  
+        // Fetch username for login
+        if (isLogin) {
+          const { data: sessionData } = await supabase.auth.getSession();
+          const userId = sessionData?.user?.id;
+  
+          if (userId) {
+            const { data: profile, error: profileError } = await supabase
+              .from('profiles')
+              .select('username')
+              .eq('id', userId)
+              .single();
+  
+            if (profileError) {
+              throw new Error('Error fetching profile: ' + profileError.message);
+            }
+  
+            fetchedUsername = profile.username; // Fetch username from database
+          }
+        }
+  
+        // Pass the username to the onLoginSuccess callback
+        onLoginSuccess(fetchedUsername);
+  
+        // If successful, close the modal
+        setMessage('Success! You are now registered.');
+        onClose();
+      })(),
+      {
+        loading: isLogin ? 'Logging in...' : 'Signing up...',
+        success: isLogin
+          ? 'Logged in successfully!'
+          : 'Account created successfully!',
+        error: (err) => `Error: ${err.message || 'Unexpected error occurred'}`,
       }
-    }
-
-    // Pass the username to the onLoginSuccess callback
-    onLoginSuccess(fetchedUsername);
-
-
-      // If successful, set the success message and close the modal
-      setMessage('Success! You are now registered.');
-      onClose();
-    } catch (err) {
-      // Handle unexpected errors
-      console.error('Error:', err.message || 'An unexpected error occurred');
-      setMessage(err.message || 'An unexpected error occurred');
-    } finally {
-      // Always stop the loading spinner
-      setIsLoading(false);
-    }
+    ).finally(() => {
+      setIsLoading(false); // Always stop the loading spinner
+    });
   };
   
 
