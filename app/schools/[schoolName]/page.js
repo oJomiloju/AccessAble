@@ -178,67 +178,96 @@ export default function SchoolPage({ params }) {
           </div>
         </div>
 
-        {/* Reviews Section */}
-        <div className="lg:w-2/3 space-y-6">
-          <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
-            {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
-          </h2>
-          {reviews.length ? (
-            <div className="space-y-4">
-              {reviews.map((review, index) => (
-                <div key={index} className="border rounded-lg p-4 bg-white shadow-lg">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-sm font-bold text-gray-800">
-                      {review.profiles?.username || " Anonymous"}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {new Date(review.review_date).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className="mb-4">{review.comment || "No comment provided."}</p>
-                  <div className="grid grid-cols-3 gap-4">
-                    {[
-                      { key: "recreation_center_rating", label: "Recreation Center" },
-                      { key: "dining_hall_rating", label: "Dining Hall" },
-                      { key: "main_area_rating", label: "Student Center" },
-                    ].map(({ key, label }, i) => (
-                      <div key={i}>
-                        <h3 className="text-sm font-semibold">{label}</h3>
-                        <div className="flex space-x-1">{review[key] || 0}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+      
+          {/* Reviews Section */}
+          <div className="lg:w-2/3 space-y-6">
+  <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
+    {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
+  </h2>
+  {reviews.length ? (
+    <div className="space-y-6">
+      {reviews.map((review, index) => (
+        <div
+          key={index}
+          className="pb-6 border-b-4 border-blue-800 last:border-none"
+        >
+          {/* User Info */}
+          <div className="flex justify-between items-center mb-2">
+            <div>
+              <p className="text-lg font-bold text-gray-900">
+                {review.profiles?.username || "Anonymous"}
+              </p>
+              <p className="text-sm text-[#133e5f]">
+                Overall Rating: {review.stars || "N/A"} / 5
+              </p>
             </div>
-          ) : (
-            <div className="text-center bg-gray-50 py-16 px-8 rounded-lg shadow-lg border border-gray-200">
-              <div className="flex flex-col items-center space-y-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-20 w-20 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
-                  No Reviews Yet
-                </h2>
-                <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
-                  Be the first to share your experience and help others learn more about this school's accessibility. Your review could make a big difference!
+          </div>
+
+          {/* Review Comment */}
+          <div>
+            <p className="text-sm text-gray-600 mb-2">
+              {new Date(review.review_date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+              })}
+            </p>
+            <p className="text-gray-700">{review.comment || "No comment provided."}</p>
+          </div>
+
+          {/* Individual Ratings */}
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            {[
+              { key: "recreation_center_rating", label: "Recreation Center" },
+              { key: "dining_hall_rating", label: "Dining Hall" },
+              { key: "main_area_rating", label: "Student Center" },
+            ].map(({ key, label }, i) => (
+              <div key={i} className="text-center">
+                <p className="font-bold text-gray-800">{label}</p>
+                <p className="text-lg text-[#133e5f]">
+                  {review[key] || "N/A"} / 5
                 </p>
-                <button
-                  onClick={handleWriteReviewClick}
-                  className="bg-gray-900 hover:bg-gray-600 text-white py-3 px-8 rounded-full shadow-md transition-transform transform hover:scale-105"
-                >
-                  Review
-                </button>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
+      ))}
+    </div>
+  ) : (
+    <div className="text-center bg-gray-50 py-16 px-8 rounded-lg shadow-lg border border-gray-200">
+      <div className="flex flex-col items-center space-y-6">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-20 w-20 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
+          No Reviews Yet
+        </h2>
+        <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
+          Be the first to share your experience and help others learn more about this school's accessibility. Your review could make a big difference!
+        </p>
+        <button
+          onClick={handleWriteReviewClick}
+          className="bg-gray-900 hover:bg-gray-600 text-white py-3 px-8 rounded-full shadow-md transition-transform transform hover:scale-105"
+        >
+          Review
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+
+
       </div>
       <ReviewModal
         isOpen={isModalOpen}

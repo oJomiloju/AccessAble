@@ -92,8 +92,8 @@ const About = () => {
 
       {/* Meet Our Team Section */}
       <div className="container mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-center mb-8">Meet Our Team</h2>
-        <p className="text-lg text-center max-w-4xl mx-auto mb-12 text-gray-600">
+        <h2 className="text-3xl text-[#004087] font-bold text-center mb-8">Meet Our Team</h2>
+        <p className="text-lg text-center max-w-4xl mx-auto mb-12 text-[#004087]">
           Behind AccessAble is a dedicated team passionate about making accessibility a priority on 
           campuses nationwide.
         </p>
