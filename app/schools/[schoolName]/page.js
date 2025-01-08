@@ -181,27 +181,40 @@ export default function SchoolPage({ params }) {
       
           {/* Reviews Section */}
           <div className="lg:w-2/3 space-y-6">
-  <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
-    {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
-  </h2>
-  {reviews.length ? (
-    <div className="space-y-6">
-      {reviews.map((review, index) => (
-        <div
-          key={index}
-          className="pb-6 border-b-4 border-blue-800 last:border-none"
-        >
-          {/* User Info */}
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <p className="text-lg font-bold text-gray-900">
-                {review.profiles?.username || "Anonymous"}
-              </p>
-              <p className="text-sm text-[#133e5f]">
-                Overall Rating: {review.stars || "N/A"} / 5
-              </p>
-            </div>
-          </div>
+            <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
+              {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
+            </h2>
+            {reviews.length ? (
+              <div className="space-y-6">
+                {reviews.map((review, index) => (
+                  <div
+                    key={index}
+                    className="pb-6 border-b-4 border-blue-800 last:border-none"
+                  >
+                    {/* User Info */}
+                    <div className="flex justify-between items-center mb-2">
+                      <div>
+                        <p className="text-lg font-bold text-gray-900">
+                          {review.profiles?.username || "Anonymous"}
+                        </p>
+                        <p className="text-md text-[#133e5f]">
+                          Overall Rating: {review.stars || "N/A"} / 5
+                        </p>
+                        {/* Individual Ratings */}
+                        {[
+                            { key: "recreation_center_rating", label: "Recreation Center" },
+                            { key: "dining_hall_rating", label: "Dining Hall" },
+                            { key: "main_area_rating", label: "Student Center" },
+                          ].map(({ key, label }, i) => (
+                            <div key={i} className="">
+                              <p className="text-sm text-gray-800">{label}</p>
+                              <p className="text-sm text-[#133e5f]">
+                                {review[key] || "N/A"} / 5
+                              </p>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
 
           {/* Review Comment */}
           <div>
@@ -212,22 +225,6 @@ export default function SchoolPage({ params }) {
               })}
             </p>
             <p className="text-gray-700">{review.comment || "No comment provided."}</p>
-          </div>
-
-          {/* Individual Ratings */}
-          <div className="grid grid-cols-3 gap-4 mt-4">
-            {[
-              { key: "recreation_center_rating", label: "Recreation Center" },
-              { key: "dining_hall_rating", label: "Dining Hall" },
-              { key: "main_area_rating", label: "Student Center" },
-            ].map(({ key, label }, i) => (
-              <div key={i} className="text-center">
-                <p className="font-bold text-gray-800">{label}</p>
-                <p className="text-lg text-[#133e5f]">
-                  {review[key] || "N/A"} / 5
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       ))}
