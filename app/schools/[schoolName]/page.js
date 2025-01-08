@@ -140,12 +140,14 @@ export default function SchoolPage({ params }) {
           }}
         ></div>
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="text-center text-white">
+          <div className="text-center text-white mt-10"> {/* Added Tailwind Margin */}
             <h1 className="text-4xl font-bold">{school.name}</h1>
             <p className="text-lg mt-2">{school.location}</p>
           </div>
         </div>
       </div>
+
+
 
       <div className="p-6 lg:flex lg:gap-8">
         {/* Ratings Section */}
