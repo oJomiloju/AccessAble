@@ -21,10 +21,60 @@ export default function SchoolPage({ params }) {
   const [school, setSchool] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(""); // Input field value
+  const [searchResults, setSearchResults] = useState([]); // Search results
+  const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // To toggle between login and sign-up in AuthModal
+  const [isLogin, setIsLogin] = useState(true);
+
+  // Fetch search results
+  useEffect(() => {
+    const fetchSchools = async () => {
+      if (searchTerm.trim() === "") {
+        setSearchResults([]);
+        setShowDropdown(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("universities")
+          .select("*")
+          .ilike("name", `%${searchTerm}%`);
+
+        if (error) {
+          console.error("Error fetching search results:", error);
+          setSearchResults([]);
+        } else {
+          setSearchResults(data);
+          setShowDropdown(true);
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        setSearchResults([]);
+      }
+    };
+
+    const debounceFetch = setTimeout(fetchSchools, 300);
+    return () => clearTimeout(debounceFetch);
+  }, [searchTerm]);
+
+  const handleSelection = (selectedSchool) => {
+    setSearchTerm(selectedSchool.name);
+    setShowDropdown(false);
+    window.location.href = `/schools/${encodeURIComponent(selectedSchool.name)}`;
+  };
+
+  const handleWriteReviewClick = () => {
+    if (!currentUser) {
+      toast.error("Log in/Sign up REQUIRED");
+      setAuthModalOpen(true); // Open the AuthModal
+      return;
+    }
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -36,7 +86,6 @@ export default function SchoolPage({ params }) {
         const resolvedParams = await params;
         const schoolName = decodeURIComponent(resolvedParams.schoolName);
 
-        // Fetch school data
         const { data: schoolData, error: schoolError } = await supabase
           .from("universities")
           .select("*")
@@ -48,7 +97,6 @@ export default function SchoolPage({ params }) {
         if (schoolError) console.error("Error fetching school:", schoolError);
         else setSchool(schoolData);
 
-        // Fetch reviews
         const { data: reviewsData, error: reviewsError } = await supabase
           .from("reviews")
           .select(`
@@ -76,37 +124,7 @@ export default function SchoolPage({ params }) {
       }
     }
 
-    async function fetchCurrentUser() {
-      try {
-        const { data: session } = await supabase.auth.getSession();
-        if (session?.session?.user) {
-          const { data: profile, error: profileError } = await supabase
-            .from("profiles")
-            .select("username")
-            .eq("id", session.session.user.id)
-            .single();
-
-          if (profileError) console.error("Error fetching profile:", profileError);
-          else setCurrentUser({ id: session.session.user.id, ...profile });
-        } else {
-          setCurrentUser(null);
-        }
-      } catch (err) {
-        console.error("Error fetching current user:", err);
-      }
-    }
-
     fetchSchoolData();
-    fetchCurrentUser();
-
-    // Listen for auth state changes
-    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        fetchCurrentUser();
-      } else {
-        setCurrentUser(null);
-      }
-    });
 
     return () => {
       isMounted = false;
@@ -115,23 +133,19 @@ export default function SchoolPage({ params }) {
 
   if (loading) return <Skeleton />;
 
-  if (!school) return <div className="text-center py-10">School not found.</div>;
-
-  const handleWriteReviewClick = () => {
-    if (!currentUser) {
-      toast.error("Log in/Sign up REQUIRED");
-      setAuthModalOpen(true);
-      return;
-    }
-    setModalOpen(true);
-  };
+  if (!school)
+    return (
+      <div className="text-center py-10">
+        <h2>No school found. Please use the search bar above.</h2>
+      </div>
+    );
 
   return (
     <div className="min-h-screen">
-        {/* Search Bar */}
+      {/* Search Bar */}
       <div className="relative pt-24 px-4">
         <div className="mx-auto lg:mx-0 lg:ml-4 max-w-3xl lg:max-w-full lg:flex lg:justify-start">
-          <div className="flex items-center bg-white border border-black rounded-full shadow-md p-4 lg:w-1/2">
+          <div className="relative flex items-center bg-white border border-black rounded-full shadow-md p-4 lg:w-1/2">
             {/* SVG Icon */}
             <div className="mr-4 flex items-center">
               <svg
@@ -144,18 +158,49 @@ export default function SchoolPage({ params }) {
                 <polygon points="3,7.059 3,11.5 8,14 13,11.5 13,7.059 8,9.559" fill="currentColor" />
               </svg>
             </div>
-            {/* Search Input */}
+            {/* Input Field */}
             <input
               type="text"
               placeholder="Search for a school..."
               className="flex-grow bg-transparent outline-none text-gray-700 text-lg"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setShowDropdown(true)}
             />
           </div>
+
+          {/* Dropdown */}
+          {showDropdown && searchResults.length > 0 && (
+            <ul
+              className="absolute bg-white shadow-md rounded-lg mt-1 z-50 max-h-64 overflow-y-auto w-full lg:w-1/2 border border-gray-300"
+              style={{ top: "100%" }} // Ensure dropdown starts just below the input field
+            >
+              {searchResults.map((result) => (
+                <li
+                  key={result.id}
+                  className="px-4 py-2 text-left hover:bg-gray-200 cursor-pointer"
+                  onClick={() => handleSelection(result)}
+                >
+                  {result.name}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* No Results */}
+          {!loading && searchResults.length === 0 && searchTerm.trim() !== "" && (
+            <div
+              className="absolute bg-white shadow-md rounded-lg mt-1 z-50 w-full lg:w-1/2 border border-gray-300"
+              style={{ top: "100%" }} // Ensure dropdown starts just below the input field
+            >
+              <p className="px-4 py-2 text-left text-gray-600">No results found</p>
+            </div>
+          )}
         </div>
       </div>
 
 
-
+      {/* Existing Content */}
       {/* Header Section */}
       <div className="relative mt-4">
         <div className="w-full h-[440px] bg-center bg-cover" style={{ backgroundImage: `url(${school.image_url})` }}></div>
@@ -166,7 +211,6 @@ export default function SchoolPage({ params }) {
           </div>
         </div>
       </div>
-
       <div className="p-6 lg:flex lg:gap-8">
         {/* Ratings Section */}
         <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-6 h-96">
