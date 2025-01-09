@@ -149,7 +149,7 @@ export default function SchoolPage({ params }) {
 
 
 
-      <div className="p-6 lg:flex lg:gap-8">
+      <div className="p-6 lg:flex lg:gap-8 h-96 overflow-auto">
         {/* Ratings Section */}
         <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4">Overall Rating</h2>
@@ -265,7 +265,7 @@ export default function SchoolPage({ params }) {
       </div>
     </div>
   )}
-</div>
+      </div>
 
 
 
