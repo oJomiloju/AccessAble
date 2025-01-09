@@ -51,7 +51,7 @@ const SchoolSearch = () => {
 
   return (
     <section className="bg-[#bcd2e3] text-gray-800 py-20 font-serif">
-      <div className="container mx-auto px-4 text-center">
+      <div className="container mx-auto px-4 text-center h-[90vh]">
         {/* Heading */}
         <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
           Accessibility, your way.
