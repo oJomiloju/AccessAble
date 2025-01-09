@@ -204,16 +204,36 @@ export default function SchoolPage({ params }) {
       </div>
 
       {/* Search Bar */}
-      <div className="p-6">
+      <div className="pb-12">
         <SearchBar onSchoolSelect={handleSchoolSelect} />
+      </div>
+      
+      {/* quick info section and image */}
+      <div className="flex flex-row pl-6 gap-48">
+        
+        {/* school quick info section*/}
+        <div className=" flex flex-col rounded-2xl p-6 border-black  w-64 bg-[#ffedd6]">
+          <h1 className="text-2xl font-bold ">Quick Info</h1>
+          <p>
+          [UniversityName] offers a dynamic campus with a state-of-the-art <br></br>
+          [RecreationCenterName], 
+           diverse dining options at [DiningHallName], <br></br>
+          and a vibrant [StudentCenterName] for community, wellness, and student engagement.
+          </p>
+        </div>
+
+        {/* school page_image  */}
+        <div >
+          <img src = {school.image_url} className="rounded-2xl "/>
+        </div>
       </div>
 
       {/* Ratings Section */}
       <div className="p-6 lg:flex lg:gap-8">
-        <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-6">
+        <div className="lg:w-1/3 bg-[#fef9f3] rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4">Overall Rating</h2>
           <span className="text-4xl font-bold text-gray-800">
-            {school.overall_rating || "N/A"}
+            {school.overall_rating || "N/A"} 
           </span>
           <h3 className="text-lg font-bold mb-4">Rating Breakdown</h3>
           {["Recreation Center", "Dining Hall", "Student Center"].map((category, index) => (
@@ -230,7 +250,7 @@ export default function SchoolPage({ params }) {
         </div>
 
         {/* Reviews Section */}
-<div className="lg:w-2/3 space-y-6">
+<div className="lg:w-2/3 space-y-6 bg-[#fef9f3] p-8 rounded-lg">
   <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
     {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
   </h2>
@@ -280,7 +300,7 @@ export default function SchoolPage({ params }) {
 </div>
 
       </div>
-
+      
       {/* Review Modal */}
       <ReviewModal
         isOpen={isModalOpen}
