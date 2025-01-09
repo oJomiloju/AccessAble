@@ -54,7 +54,7 @@ const SchoolSearch = () => {
       <div className="container mx-auto px-4 text-center">
         {/* Heading */}
         <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
-          Accessability, your way.
+          Accessibility, your way.
         </h2>
 
         {/* Search Box */}

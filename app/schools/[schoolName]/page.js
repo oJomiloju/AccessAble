@@ -194,23 +194,27 @@ export default function SchoolPage({ params }) {
                     {/* User Info */}
                     <div className="flex justify-between items-center mb-2">
                       <div>
-                        <p className="text-lg font-bold text-gray-900">
+                        <div className="flex flex-row">
+                        <p className="text-lg font-bold text-gray-900 underline mr-2">
                           {review.profiles?.username || "Anonymous"}
                         </p>
-                        <p className="text-md text-[#133e5f]">
-                          Overall Rating: {review.stars || "N/A"} / 5
+                        <p className="text-lg font-bold text-[#133e5f] ">
+                          | Rating: {review.stars || "N/A"} / 5
                         </p>
+                        <p className="text-sm text-gray-600 mb-2 ">
+                            {new Date(review.review_date).toLocaleDateString("en-US", {year: "numeric",month: "long",})}
+                        </p>
+                        </div>
                         {/* Individual Ratings */}
                         {[
                             { key: "recreation_center_rating", label: "Recreation Center" },
                             { key: "dining_hall_rating", label: "Dining Hall" },
                             { key: "main_area_rating", label: "Student Center" },
                           ].map(({ key, label }, i) => (
-                            <div key={i} className="">
-                              <p className="text-sm text-gray-800">{label}</p>
+                            <div key={i} className="flex flex-row">
+                              <p className="text-sm text-gray-800 mr-2">{label}:</p>
                               <p className="text-sm text-[#133e5f]">
-                                {review[key] || "N/A"} / 5
-                              </p>
+                                {review[key] || "N/A"} / 5</p>
                             </div>
                           ))}
                       </div>

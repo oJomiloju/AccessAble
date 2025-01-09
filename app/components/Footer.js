@@ -4,16 +4,21 @@ import Image from 'next/image'; // Import the Next.js Image component
 
 const Footer = () => {
   return (
-    <footer className="bg-[#FAFAFA] text-gray-900 py-6">
-      <div className="container mx-auto px-4 text-center">
+    <footer className="bg-[#bcd2e3] text-gray-900" >
+      <div className="flex flex-col justify-center items-center text-center">
         {/* Brand Name Image */}
-        <div className="flex justify-center mb-4">
+        <div className="flex bg-transparent bg-contain mb-4 w-40 h-20 justify-center items-center"
+        >
+         
           <Image
             src={logo} // Use the imported image
             alt="AccessAble Logo"
             width={150} // Set a fixed width
-            height={80} // Height will adjust based on aspect ratio
+            height={50} // Height will adjust based on aspect ratio
+          
             priority // Optimize loading
+          
+
           />
         </div>
 
@@ -31,7 +36,7 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <p className="text-sm text-[#004087] font-semibold mt-4">
+        <p className="text-sm text-[#004087] font-semibold mb-2">
           © {new Date().getFullYear()} AccessAble. All rights reserved.
         </p>
       </div>
