@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata = {
-  title: 'ACCESSABLE',
+  title: 'AccessAble',
   description: 'A simple Next.js app with a Navbar and Footer',
 };
 

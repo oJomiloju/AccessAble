@@ -54,7 +54,7 @@ const SchoolSearch = () => {
       <div className="container mx-auto px-4 text-center">
         {/* Heading */}
         <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
-          Accessability, your way.
+          Accessibility, your way.
         </h2>
 
         {/* Search Box */}
@@ -63,7 +63,7 @@ const SchoolSearch = () => {
             {/* Input Field */}
             <input
               type="text"
-              placeholder= "Enter your school or university text" 
+              placeholder= "Search your campus or university" 
               value={school}
               onChange={(e) => setSchool(e.target.value)}
               className="w-full px-12 py-3 border border-[#083d77] rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder-gray-600 placeholder:font-serif"
