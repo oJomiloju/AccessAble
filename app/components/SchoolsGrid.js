@@ -4,7 +4,7 @@ import Link from 'next/link';
 import supabase from '../lib/supabaseClient';
 
 const SkeletonCard = () => (
-  <div className="bg-gray-300 animate-pulse rounded-xl shadow-md overflow-hidden">
+  <div className="bg-gray-300 animate-pulse rounded-3xl shadow-md overflow-hidden">
     <div className="w-full h-48 bg-gray-400"></div>
     <div className="p-4 space-y-2">
       <div className="h-6 bg-gray-400 rounded"></div>
@@ -52,19 +52,21 @@ const SchoolsGrid = () => {
   return (
     <section className="bg-[#FAFAFA] py-10">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {schools.map((school) => (
             <Link
               key={school.id}
               href={`/schools/${encodeURIComponent(school.name)}`}
             >
-              <div className="bg-[#004087] rounded-xl shadow-md overflow-hidden cursor-pointer">
-                <img
-                  loading="lazy"
-                  src={school.image_url} // Use the image_url field from your database
-                  alt={school.name}
-                  className="w-full h-48 object-cover"
-                />
+              <div className="bg-[#004087] rounded-3xl shadow-md overflow-hidden cursor-pointer">
+                <div className="rounded-t-3xl overflow-hidden">
+                  <img
+                    loading="lazy"
+                    src={school.image_url} // Use the image_url field from your database
+                    alt={school.name}
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
                 <div className="p-4">
                   <h3 className="text-xl font-sans font-bold text-[#ffedd6] truncate">
                     {school.name}
