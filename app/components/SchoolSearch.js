@@ -70,10 +70,6 @@ const SchoolSearch = () => {
               onFocus={() => setShowDropdown(true)} // Show dropdown on focus
             />
 
-            
-
-
-
             {/* SVG Icon */}
             <div className="absolute inset-y-0 left-4 flex items-center text-[#083d77]">
               <svg
