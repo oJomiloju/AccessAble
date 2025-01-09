@@ -149,9 +149,9 @@ export default function SchoolPage({ params }) {
 
 
 
-      <div className="p-6 lg:flex lg:gap-8 h-96 overflow-auto">
+      <div className="p-6 lg:flex lg:gap-8 ">
         {/* Ratings Section */}
-        <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-6">
+        <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-6 h-96">
           <h2 className="text-2xl font-bold mb-4">Overall Rating</h2>
           <div className="flex items-center space-x-4 mb-6">
             <span className="text-4xl font-bold text-gray-800">
@@ -162,7 +162,7 @@ export default function SchoolPage({ params }) {
           {/* Rating Breakdown */}
           <h3 className="text-lg font-bold mb-4">Rating Breakdown</h3>
           {["Recreation Center", "Dining Hall", "Student Center"].map((category, index) => (
-            <div key={index} className="flex items-center mb-2">
+            <div key={index} className="flex items-center mb-2 ">
               <span className="w-40 text-gray-600">{category}</span>
             </div>
           ))}
@@ -180,7 +180,7 @@ export default function SchoolPage({ params }) {
 
       
           {/* Reviews Section */}
-          <div className="lg:w-2/3 space-y-6">
+          <div className="lg:w-2/3 space-y-6 h-auto overflow-auto">
             <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
               {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
             </h2>
@@ -265,11 +265,10 @@ export default function SchoolPage({ params }) {
       </div>
     </div>
   )}
+          </div>
       </div>
 
 
-
-      </div>
       <ReviewModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
