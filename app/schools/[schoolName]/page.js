@@ -133,19 +133,20 @@ export default function SchoolPage({ params }) {
     <div className="min-h-screen">
       {/* Header Section */}
       <div className="relative mb-8">
-        <div
-          className="w-full h-64 bg-center bg-cover"
-          style={{
-            backgroundImage: `url(${school.image_url})`,
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="text-center text-white mt-10"> {/* Added Tailwind Margin */}
-            <h1 className="text-4xl font-bold">{school.name}</h1>
-            <p className="text-lg mt-2">{school.location}</p>
-          </div>
-        </div>
-      </div>
+  <div
+    className="w-full h-[500px] bg-center bg-cover"
+    style={{
+      backgroundImage: `url(${school.image_url})`,
+    }}
+  ></div>
+  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="text-center text-white">
+      <h1 className="text-4xl font-bold">{school.name}</h1>
+      <p className="text-lg mt-2">{school.location}</p>
+    </div>
+  </div>
+</div>
+
 
 
 
