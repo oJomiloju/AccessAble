@@ -205,11 +205,8 @@ export default function SchoolPage({ params }) {
                         <p className="text-lg font-bold text-gray-900 underline mr-2">
                           {review.profiles?.username || "Anonymous"}
                         </p>
-                        <p className="text-lg font-bold text-[#133e5f] ">
-                          | Rating: {review.stars || "N/A"} / 5
-                        </p>
-                        <p className="text-sm text-gray-600 mb-2 ">
-                            {new Date(review.review_date).toLocaleDateString("en-US", {year: "numeric",month: "long",})}
+                        <p className="text-lg font-bold text-blue-800">
+                          |  Rating: {review.stars || "N/A"}/5
                         </p>
                         </div>
                         {/* Individual Ratings */}
@@ -229,13 +226,14 @@ export default function SchoolPage({ params }) {
 
           {/* Review Comment */}
           <div>
+            
+            <p className="text-gray-700">{review.comment || "No comment provided."}</p>
             <p className="text-sm text-gray-600 mb-2">
               {new Date(review.review_date).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
               })}
             </p>
-            <p className="text-gray-700">{review.comment || "No comment provided."}</p>
           </div>
         </div>
       ))}
