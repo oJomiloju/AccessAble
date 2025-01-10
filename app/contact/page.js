@@ -65,7 +65,8 @@ const Contact = () => {
             <div className="items-center">
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h4 className="text-xl font-bold mb-2">Email Us</h4>
-                <p>contact@accessable.com</p>
+                <p>accessable292@gmail.com
+                </p>
               </div>
 
 
