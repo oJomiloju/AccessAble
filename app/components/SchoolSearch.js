@@ -8,6 +8,26 @@ const SchoolSearch = () => {
   const [searchResults, setSearchResults] = useState([]); // Search results
   const [loading, setLoading] = useState(false); // Loading state
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
+  const [placeholder, setPlaceholder] = useState("Search your campus or university"); // Placeholder text
+ 
+  useEffect(() => {
+    const updatePlaceholder = () => {
+      if (window.innerWidth <= 640) {
+        setPlaceholder("   Search your campus");
+      } else {
+        setPlaceholder("Search your campus or university");
+      }
+    };
+ 
+    // Set the initial placeholder
+    updatePlaceholder();
+ 
+    // Update the placeholder on window resize
+    window.addEventListener("resize", updatePlaceholder);
+ 
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", updatePlaceholder);
+  }, []);
  
   useEffect(() => {
     const fetchSchools = async () => {
@@ -50,24 +70,28 @@ const SchoolSearch = () => {
   };
  
   return (
-    <div className="text-gray-800 pt-40 py-20 font-serif bg-cover bg-center bg-no-repeat h-screen sm:bg-contain sm:bg-top"
-    style={{backgroundImage:`url('/images/BGimage.png')`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    height: '100vh'}}>
+    <div
+      className="text-gray-800 py-20 font-serif bg-cover bg-center bg-no-repeat h-screen sm:bg-contain sm:bg-center"
+      style={{
+        backgroundImage: `url('/images/BGimage.png')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        height: "100vh",
+      }}
+    >
       <div className="flex flex-col container mx-auto px-4 text-center h-[90vh]">
         {/* Heading */}
         <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
           Accessibility, your way.
         </h2>
         <h2 className="text-center text-lg text-[#083d77]">
-        Share your experience and help others learn more about this school's accessibility.
-        <br></br> Your review could make a big difference!
+          Share your experience and help others learn more about this school's accessibility.
+          <br /> Your review could make a big difference!
         </h2>
  
-        <h2 className="text-center text-lg text-[#083d77] mt-20" >
-        Rate your campus, Read reviews, Contribute to change.
+        <h2 className="text-center text-lg text-[#083d77] mt-20">
+          Rate your campus, Read reviews, Contribute to change.
         </h2>
  
         {/* Search Box */}
@@ -76,12 +100,13 @@ const SchoolSearch = () => {
             {/* Input Field */}
             <input
               type="text"
-              placeholder= "Search your campus or university"
+              placeholder={placeholder}
               value={school}
               onChange={(e) => setSchool(e.target.value)}
-              className="w-full pl-16 py-2.5 mt-2 border border-[#083d77]  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder:text-[#88a0b7] placeholder:font-serif  placeholder: text-2xl"
+              className="w-full pl-16 py-4 border border-[#083d77] rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder:text-[#88a0b7] placeholder:font-serif placeholder:text-2xl"
               onFocus={() => setShowDropdown(true)} // Show dropdown on focus
             />
+ 
  
             
  
@@ -180,4 +205,5 @@ const SchoolSearch = () => {
   );
 };
  
-export default SchoolSearch
+export default SchoolSearch;
+ 
