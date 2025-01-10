@@ -143,8 +143,8 @@ export default function SchoolPage({ params }) {
   return (
     <div className="min-h-screen">
       {/* Search Bar */}
-      <div className="relative pt-24 px-4">
-        <div className="mx-auto lg:mx-0 lg:ml-4 max-w-3xl lg:max-w-full lg:flex lg:justify-start">
+      <div className="relative pt-24 px-4 ">
+        <div className=" lg:mx-0 lg:ml-[400px] max-w-3xl lg:max-w-full lg:flex lg:justify-start">
           <div className="relative flex items-center bg-white border border-black rounded-full shadow-md p-4 lg:w-1/2">
             {/* SVG Icon */}
             <div className="mr-4 flex items-center">
@@ -234,58 +234,6 @@ export default function SchoolPage({ params }) {
           </div>
         </div>
 
-<<<<<<< HEAD
-      
-          {/* Reviews Section */}
-          <div className="lg:w-2/3 space-y-6 h-auto overflow-auto">
-            <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
-              {reviews.length ? `Browse ${reviews.length} Reviews` : "No Reviews Yet"}
-            </h2>
-            {reviews.length ? (
-              <div className="space-y-6">
-                {reviews.map((review, index) => (
-                  <div
-                    key={index}
-                    className="pb-6 border-b-4 border-blue-800 last:border-none"
-                  >
-                    {/* User Info */}
-                    <div className="flex justify-between items-center mb-2">
-                      <div>
-                        <div className="flex flex-row">
-                        <p className="text-lg font-bold text-gray-900 underline mr-2">
-                          {review.profiles?.username || "Anonymous"}
-                        </p>
-                        <p className="text-lg font-bold text-blue-800">
-                          |  Rating: {review.stars || "N/A"}/5
-                        </p>
-                        </div>
-                        {/* Individual Ratings */}
-                        {[
-                            { key: "recreation_center_rating", label: "Recreation Center" },
-                            { key: "dining_hall_rating", label: "Dining Hall" },
-                            { key: "main_area_rating", label: "Student Center" },
-                          ].map(({ key, label }, i) => (
-                            <div key={i} className="flex flex-row">
-                              <p className="text-sm text-gray-800 mr-2">{label}:</p>
-                              <p className="text-sm text-[#133e5f]">
-                                {review[key] || "N/A"} / 5</p>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-
-          {/* Review Comment */}
-          <div>
-            
-            <p className="text-gray-700">{review.comment || "No comment provided."}</p>
-            <p className="text-sm text-gray-600 mb-2">
-              {new Date(review.review_date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-              })}
-            </p>
-          </div>
-=======
         {/* Reviews Section */}
         <div className="lg:w-2/3 space-y-6 h-auto overflow-auto">
           <h2 className="text-3xl font-extrabold text-gray-800 pt-3">
@@ -294,14 +242,14 @@ export default function SchoolPage({ params }) {
 
           {reviews.length > 0 ? (
             reviews.map((review, index) => (
-              <div key={index} className="pb-6 border-b-4 border-blue-800 last:border-none">
+              <div key={index} className="pb-6 border-b-2 border-blue-800 last:border-none">
                 <div className="flex justify-between items-center mb-2">
                   <div>
                     <p className="text-lg font-bold text-gray-900 underline mr-2">
                       {review.profiles?.username || "Anonymous"}
                     </p>
-                    <p className="text-lg font-bold text-[#133e5f]">
-                      | Rating: {review.stars || "N/A"} / 5
+                    <p className="text-base font-bold text-[#133e5f]">
+                      Rating: {review.stars || "N/A"} / 5
                     </p>
                   </div>
                 </div>
@@ -340,7 +288,6 @@ export default function SchoolPage({ params }) {
               </div>
             </div>
           )}
->>>>>>> refs/remotes/origin/main
         </div>
 
       </div>
