@@ -1,14 +1,14 @@
 "use client"; // Required for React hooks in Next.js App Router
-
+ 
 import { useState, useEffect } from "react";
 import supabase from "@/app/lib/supabaseClient";
-
+ 
 const SchoolSearch = () => {
   const [school, setSchool] = useState(""); // Input field value
   const [searchResults, setSearchResults] = useState([]); // Search results
   const [loading, setLoading] = useState(false); // Loading state
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
-
+ 
   useEffect(() => {
     const fetchSchools = async () => {
       if (school.trim() === "") {
@@ -16,14 +16,14 @@ const SchoolSearch = () => {
         setShowDropdown(false);
         return;
       }
-
+ 
       setLoading(true);
       try {
         const { data, error } = await supabase
           .from("universities")
           .select("*")
           .ilike("name", `%${school}%`); // Case-insensitive search
-
+ 
         if (error) {
           console.error("Error fetching search results:", error);
           setSearchResults([]);
@@ -38,42 +38,55 @@ const SchoolSearch = () => {
         setLoading(false);
       }
     };
-
+ 
     const debounceFetch = setTimeout(fetchSchools, 300); // Add a delay for better UX
     return () => clearTimeout(debounceFetch); // Cleanup timeout
   }, [school]);
-
+ 
   const handleSelection = (selectedSchool) => {
     setSchool(selectedSchool.name);
     setShowDropdown(false);
     window.location.href = `/schools/${encodeURIComponent(selectedSchool.name)}`;
   };
-
+ 
   return (
-    <section className="bg-[#bcd2e3] text-gray-800 py-20 font-serif">
-      <div className="container mx-auto px-4 text-center h-[90vh]">
+    <div className="text-gray-800 pt-40 py-20 font-serif bg-cover bg-center bg-no-repeat h-screen sm:bg-contain sm:bg-top"
+    style={{backgroundImage:`url('/images/BGimage.png')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    height: '100vh'}}>
+      <div className="flex flex-col container mx-auto px-4 text-center h-[90vh]">
         {/* Heading */}
         <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
           Accessibility, your way.
         </h2>
-
+        <h2 className="text-center text-lg text-[#083d77]">
+        Share your experience and help others learn more about this school's accessibility.
+        <br></br> Your review could make a big difference!
+        </h2>
+ 
+        <h2 className="text-center text-lg text-[#083d77] mt-20" >
+        Rate your campus, Read reviews, Contribute to change.
+        </h2>
+ 
         {/* Search Box */}
-        <div className="relative max-w-lg mx-auto">
+        <div className="relative max-w-lg w-full mx-auto h-48">
           <div className="relative">
             {/* Input Field */}
             <input
               type="text"
-              placeholder= "Search your campus or university" 
+              placeholder= "Search your campus or university"
               value={school}
               onChange={(e) => setSchool(e.target.value)}
-              className="w-full px-12 py-3 border border-[#083d77] rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder-gray-600 placeholder:font-serif"
+              className="w-full pl-16 py-2.5 mt-2 border border-[#083d77]  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 placeholder:text-[#88a0b7] placeholder:font-serif  placeholder: text-2xl"
               onFocus={() => setShowDropdown(true)} // Show dropdown on focus
             />
-
+ 
             
-
-
-
+ 
+ 
+ 
             {/* SVG Icon */}
             <div className="absolute inset-y-0 left-4 flex items-center text-[#083d77]">
               <svg
@@ -132,7 +145,7 @@ const SchoolSearch = () => {
               </svg>
             </div>
           </div>
-
+ 
           {/* Dropdown */}
           {showDropdown && searchResults.length > 0 && (
             <ul className="absolute w-full bg-white shadow-md rounded-lg mt-2 z-50 max-h-64 overflow-y-auto">
@@ -147,14 +160,14 @@ const SchoolSearch = () => {
               ))}
             </ul>
           )}
-
+ 
           {/* Loading Indicator */}
           {loading && (
             <div className="absolute top-0 right-0 mt-3 mr-6 text-gray-500">
               Searching...
             </div>
           )}
-
+ 
           {/* No Results */}
           {!loading && searchResults.length === 0 && school.trim() !== "" && (
             <div className="absolute w-full bg-white shadow-md rounded-lg mt-2 z-50">
@@ -163,8 +176,8 @@ const SchoolSearch = () => {
           )}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
-
+ 
 export default SchoolSearch;
