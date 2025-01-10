@@ -180,4 +180,4 @@ const SchoolSearch = () => {
   );
 };
  
-export default SchoolSearch;
+export default SchoolSearch
