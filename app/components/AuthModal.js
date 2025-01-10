@@ -216,6 +216,7 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => 
                 Sign Up
               </span>
             </>
+
           ) : (
             <>
               Already have an account?{' '}

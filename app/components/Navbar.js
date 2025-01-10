@@ -273,8 +273,8 @@ const Navbar = () => {
             
             // Refresh the page after the toast duration
             setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+             window.location.reload();
+            }, 500) ;
 
           }}
         />
@@ -284,6 +284,7 @@ const Navbar = () => {
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
             onClick={() => setIsSignOutModalOpen(false)} // Close modal when clicking outside
+            
           >
             <div
               className="bg-white p-6 rounded-3xl shadow-xl max-w-sm w-full text-center relative"
@@ -322,8 +323,14 @@ const Navbar = () => {
               {/* Buttons */}
               <div className="space-y-4">
                 <button
-                  onClick={handleSignOut}
+                  onClick={() => {
+                    handleSignOut();
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 500);
+                  }}
                   className="w-full py-3 bg-black text-white rounded-full text-lg hover:bg-gray-800 transition duration-300"
+                  
                 >
                   Yes, Log Out
                 </button>

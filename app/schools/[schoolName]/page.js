@@ -21,13 +21,27 @@ export default function SchoolPage({ params }) {
   const [school, setSchool] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [searchTerm, setSearchTerm] = useState(""); // Input field value
   const [searchResults, setSearchResults] = useState([]); // Search results
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+
+  // Check if user is logged in when component mounts
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error fetching current user:", error);
+      } else if (user) {
+        setCurrentUser(user);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   // Fetch search results
   useEffect(() => {
@@ -67,36 +81,65 @@ export default function SchoolPage({ params }) {
     window.location.href = `/schools/${encodeURIComponent(selectedSchool.name)}`;
   };
 
-  const handleWriteReviewClick = () => {
-    if (!currentUser) {
-      toast.error("Log in/Sign up REQUIRED");
-      setAuthModalOpen(true); // Open the AuthModal
-      return;
+  // Fetch average ratings for the university
+  const fetchAverageRatings = async (universityId) => {
+    try {
+      const { data, error } = await supabase.rpc("get_average_ratings", {
+        university_id_input: universityId,
+      });
+  
+      console.log("Supabase RPC Response:", { data, error }); // Debugging
+  
+      if (error || !data) {
+        console.error("Error fetching average ratings via RPC:", error || "No data returned");
+        return {
+          recreation_center_avg: null,
+          dining_hall_avg: null,
+          student_center_avg: null,
+        };
+      }
+  
+      return data[0];
+    } catch (err) {
+      console.error("Unexpected error fetching average ratings via RPC:", err);
+      return {
+        recreation_center_avg: null,
+        dining_hall_avg: null,
+        student_center_avg: null,
+      };
     }
-    setModalOpen(true);
   };
+  
 
   useEffect(() => {
     let isMounted = true;
-
+  
     async function fetchSchoolData() {
       if (!isMounted) return;
-
+  
       try {
         const resolvedParams = await params;
         const schoolName = decodeURIComponent(resolvedParams.schoolName);
-
+  
         const { data: schoolData, error: schoolError } = await supabase
           .from("universities")
           .select("*")
           .eq("name", schoolName)
           .single();
-
+  
         if (!isMounted) return;
-
-        if (schoolError) console.error("Error fetching school:", schoolError);
-        else setSchool(schoolData);
-
+  
+        if (schoolError) {
+          console.error("Error fetching school:", schoolError);
+        } else {
+          const averages = await fetchAverageRatings(schoolData.id);
+          console.log("Fetched averages:", averages); // Debugging
+          setSchool({
+            ...schoolData,
+            averages,
+          });
+        }
+  
         const { data: reviewsData, error: reviewsError } = await supabase
           .from("reviews")
           .select(`
@@ -111,25 +154,39 @@ export default function SchoolPage({ params }) {
             profiles (username)
           `)
           .eq("university_id", schoolData.id);
-
+  
         if (!isMounted) return;
-
-        if (reviewsError) console.error("Error fetching reviews:", reviewsError);
-        else setReviews(reviewsData || []);
+  
+        if (reviewsError) {
+          console.error("Error fetching reviews:", reviewsError);
+        } else {
+          setReviews(reviewsData || []);
+        }
       } catch (err) {
         if (!isMounted) return;
         console.error("Unexpected error:", err);
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
-
+  
     fetchSchoolData();
-
+  
     return () => {
       isMounted = false;
     };
   }, [params]);
+
+  const handleWriteReviewClick = () => {
+    if (!currentUser) {
+      toast.error("Log in/Sign up REQUIRED");
+      setAuthModalOpen(true); // Open the AuthModal
+      return;
+    }
+    setModalOpen(true);
+  };
 
   if (loading) return <Skeleton />;
 
@@ -142,10 +199,11 @@ export default function SchoolPage({ params }) {
 
   return (
     <div className="min-h-screen">
+
       {/* Search Bar */}
       <div className="relative pt-24 px-4 ">
         <div className=" lg:mx-0 lg:ml-[400px] max-w-3xl lg:max-w-full lg:flex lg:justify-start">
-          <div className="relative flex items-center bg-white border border-black rounded-full shadow-md p-4 lg:w-1/2">
+          <div className="relative flex items-center bg-white border border-black rounded-full shadow-md p-3 lg:w-1/2">
             {/* SVG Icon */}
             <div className="mr-4 flex items-center">
               <svg
@@ -199,11 +257,9 @@ export default function SchoolPage({ params }) {
         </div>
       </div>
 
-
-      {/* Existing Content */}
       {/* Header Section */}
       <div className="relative mt-4">
-        <div className="w-full h-[440px] bg-center bg-cover" style={{ backgroundImage: `url(${school.image_url})` }}></div>
+        <div className="w-full h-[440px] bg-center bg-cover " style={{ backgroundImage: `url(${school.image_url})` }}></div>
         <div className="absolute inset-0 flex items-end justify-between p-8 bg-gradient-to-t from-black via-transparent to-transparent">
           <div>
             <h1 className="text-4xl font-bold text-white">{school.name}</h1>
@@ -213,15 +269,21 @@ export default function SchoolPage({ params }) {
       </div>
       <div className="p-6 lg:flex lg:gap-8">
         {/* Ratings Section */}
-        <div className="lg:w-1/3 bg-white rounded-lg shadow-md p-6 h-96">
+        <div className="lg:w-1/4 bg-white rounded-lg shadow-md p-6 h-96">
           <h2 className="text-2xl font-bold mb-4">Overall Rating</h2>
           <div className="flex items-center space-x-4 mb-6">
             <span className="text-4xl font-bold text-gray-800">{school.overall_rating || "N/A"}</span>
           </div>
           <h3 className="text-lg font-bold mb-4">Rating Breakdown</h3>
-          {["Recreation Center", "Dining Hall", "Student Center"].map((category, index) => (
-            <div key={index} className="flex items-center mb-2">
-              <span className="w-40 text-gray-600">{category}</span>
+          {[
+            { category: "Rec Center", value: school?.averages?.recreation_center_avg },
+            { category: "Dining Hall", value: school?.averages?.dining_hall_avg },
+            { category: "Student Center", value: school?.averages?.student_center_avg },
+          ].map(({ category, value }, index) => (
+          <div key={index} className="flex items-center mb-2">
+            <span className="w-40 text-gray-600">{`${category}: ${
+              value && typeof value === "number" ? value.toFixed(1) : "N/A"
+            }`}</span>
             </div>
           ))}
           <div className="mt-6 flex justify-start">
@@ -241,43 +303,42 @@ export default function SchoolPage({ params }) {
           </h2>
 
           {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <div key={index} className="pb-6 border-b-2 border-blue-800 last:border-none">
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <p className="text-lg font-bold text-gray-900 underline mr-2">
-                      {review.profiles?.username || "Anonymous"}
-                    </p>
-                    <p className="text-base font-bold text-[#133e5f]">
-                      Rating: {review.stars || "N/A"} / 5
-                    </p>
+            reviews.map((review, index) => {
+              const reviewDate = new Date(review.review_date);
+              const today = new Date();
+              const isToday = reviewDate.toDateString() === today.toDateString();
+
+              const formattedDate = isToday
+                ? `${reviewDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}, Today`
+                : reviewDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+              return (
+                <div key={index} className="pb-6 border-b-2 border-blue-800 last:border-none">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <p className="text-lg font-bold text-gray-900 underline mr-2">
+                        {review.profiles?.username || "Anonymous"}
+                      </p>
+                      <p className="text-base font-bold text-[#133e5f]">
+                        Rating: {review.stars || "N/A"} / 5
+                      </p>
+                    </div>
                   </div>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {review.comment || "No comment provided."}
+                  </p>
+                  <p className="text-xs text-gray-500 italic">Posted on: {formattedDate}</p>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{review.comment || "No comment provided."}</p>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="text-center bg-gray-50 py-16 px-8 rounded-lg shadow-lg border border-gray-200">
               <div className="flex flex-col items-center space-y-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-20 w-20 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
                 <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
                   No Reviews Yet
                 </h2>
                 <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
-                  Be the first to share your experience and help others learn more about this school's accessibility. Your review could make a big difference!
+                  Be the first to share your experience!
                 </p>
                 <button
                   onClick={handleWriteReviewClick}
@@ -289,7 +350,6 @@ export default function SchoolPage({ params }) {
             </div>
           )}
         </div>
-
       </div>
 
       <ReviewModal
