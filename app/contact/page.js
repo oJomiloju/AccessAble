@@ -54,7 +54,7 @@ const Contact = () => {
             </button>
           </form>
         </div>
-  
+        
         {/* Contact Details Section */}
         <div className="bg-[#f0f8ff] py-16">
           <div className="container mx-auto px-6 text-center">

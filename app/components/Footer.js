@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="bg-[#bcd2e3] text-gray-900" >
       <div className="flex flex-col justify-center items-center text-center">
         {/* Brand Name Image */}
-        <div className="flex bg-transparent bg-contain mb-4 w-40 h-20 justify-center items-center"
+        <div className="flex bg-transparent bg-contain  w-40 h-20 justify-center items-center"
         >
          
           <Image
@@ -23,7 +23,7 @@ const Footer = () => {
         </div>
 
         {/* Links */}
-        <div className="flex justify-center space-x-6 mb-4">
+        <div className="flex justify-center space-x-6 mb-6">
           <a href="/" className="hover:underline text-[#004087] font-semibold">
             Home
           </a>
