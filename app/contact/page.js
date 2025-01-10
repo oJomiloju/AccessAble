@@ -62,31 +62,13 @@ const Contact = () => {
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
               Whether you prefer email, phone, or social media, you can reach us in multiple ways. We're excited to hear from you!
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="items-center">
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h4 className="text-xl font-bold mb-2">Email Us</h4>
                 <p>contact@accessable.com</p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h4 className="text-xl font-bold mb-2">Call Us</h4>
-                <p>+1 (800) 123-4567</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h4 className="text-xl font-bold mb-2">Follow Us</h4>
-                <p>
-                  <a href="#" className="hover:underline text-blue-600">
-                    Twitter
-                  </a>{" "}
-                  |{" "}
-                  <a href="#" className="hover:underline text-blue-600">
-                    Instagram
-                  </a>{" "}
-                  |{" "}
-                  <a href="#" className="hover:underline text-blue-600">
-                    Facebook
-                  </a>
-                </p>
-              </div>
+
+
             </div>
           </div>
         </div>
