@@ -80,9 +80,9 @@ const SchoolSearch = () => {
         height: "100vh",
       }}
     >
-      <div className="flex flex-col container mx-auto px-4 text-center h-[90vh]">
+      <div className="flex flex-col container mx-auto px-4 text-center pt-16 h-[90vh]">
         {/* Heading */}
-        <h2 className="text-5xl font-sans font-semibold mb-6 text-[#083d77] ">
+        <h2 className="text-5xl font-sans font-semibold mb-6 mt-30 text-[#083d77] ">
           Accessibility, your way.
         </h2>
         <h2 className="text-center text-lg text-[#083d77]">
