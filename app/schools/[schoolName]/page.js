@@ -317,7 +317,7 @@ export default function SchoolPage({ params }) {
                   <div className="flex justify-between items-center mb-2">
                     <div>
                       <p className="text-lg font-bold text-gray-900 underline mr-2">
-                        {review.profiles?.username || "Anonymous"}
+                        {review.profiles?.username || "deleted user"}
                       </p>
                       <p className="text-base font-bold text-[#133e5f]">
                         Rating: {review.stars || "N/A"} / 5
@@ -327,7 +327,7 @@ export default function SchoolPage({ params }) {
                   <p className="text-sm text-gray-600 mb-2">
                     {review.comment || "No comment provided."}
                   </p>
-                  <p className="text-xs text-gray-500 italic">Posted on: {formattedDate}</p>
+                  <p className="text-xs text-gray-500 italic">Posted: {formattedDate}</p>
                 </div>
               );
             })

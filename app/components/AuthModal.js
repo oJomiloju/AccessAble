@@ -170,7 +170,7 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => 
                 value={username} //this is what links it to the react useState variable
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-2 bg-white text-gray-800 border border-black placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                placeholder="Username"
+                placeholder="Full Name or Username"
               />
             </div>
           )}
@@ -180,7 +180,7 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => 
               value = {email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
               className="w-full p-2 bg-white text-gray-800 border border-black placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-              placeholder="Email"
+              placeholder="Email (case sensitive)"
             />
           </div>
           <div className="mb-6">
@@ -189,7 +189,7 @@ const AuthModal = ({ isOpen, onClose, isLogin, setIsLogin , onLoginSuccess}) => 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 bg-white text-gray-800 border border-black placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-              placeholder="Password"
+              placeholder="Password (case sensitive)"
             />
           </div>
           <button
