@@ -48,20 +48,18 @@ const Contact = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-[#007BFF] text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition duration-200"
+              className="w-full bg-gray-300 text-white font-bold py-3 rounded-lg  transition duration-200"
             >
-              Send Message
+              Feature Pending..
             </button>
           </form>
         </div>
-        
+
         {/* Contact Details Section */}
         <div className="bg-[#f0f8ff] py-16">
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl font-bold mb-6">Our Contact Details</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
-              Whether you prefer email, phone, or social media, you can reach us in multiple ways. We're excited to hear from you!
-            </p>
+            
             <div className="items-center">
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h4 className="text-xl font-bold mb-2">Email Us</h4>

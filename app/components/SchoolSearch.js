@@ -86,7 +86,7 @@ const SchoolSearch = () => {
           Accessibility, your way.
         </h2>
         <h2 className="text-center text-lg text-[#083d77]">
-          Share your experience and help others learn more about this school's accessibility.
+          Share your experience and help others learn more about a school's accessibility.
           <br /> Your review could make a big difference!
         </h2>
 
